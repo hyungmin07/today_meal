@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const searchButton = document.getElementById("search-button");
     const searchResults = document.getElementById("search-results");
-    
+    const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f"; // NEIS API 키
+
     // 🔹 자동완성 기능 추가
     const suggestionsContainer = document.createElement("div");
     suggestionsContainer.classList.add("autocomplete-suggestions");
@@ -16,21 +17,23 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch("http://127.0.0.1:5500/search_school?query=" + query)
+        // NEIS API를 사용해 학교 목록 검색
+        fetch(`https://open.neis.go.kr/hub/schoolInfo?KEY=${API_KEY}&Type=json&SCHUL_NM=${query}`)
             .then(response => response.json())
             .then(data => {
                 suggestionsContainer.innerHTML = "";
-                if (data.length === 0) return;
+                if (!data.schoolInfo) return;
 
                 suggestionsContainer.style.display = "block"; // 자동완성 목록 표시
-                data.forEach(school => {
+                data.schoolInfo[1].row.forEach(school => {
                     const suggestion = document.createElement("div");
                     suggestion.classList.add("autocomplete-item");
-                    suggestion.textContent = school["학교명"];
+                    suggestion.textContent = school.SCHUL_NM;
                     suggestion.addEventListener("click", function () {
-                        searchInput.value = school["학교명"];
+                        searchInput.value = school.SCHUL_NM;
                         suggestionsContainer.innerHTML = "";
                         suggestionsContainer.style.display = "none"; // 자동완성 목록 숨기기
+                        showSchoolInfo(school);
                     });
                     suggestionsContainer.appendChild(suggestion);
                 });
@@ -53,41 +56,41 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch("http://127.0.0.1:5500/search_school?query=" + query)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("서버 오류: " + response.status);
-                }
-                return response.json();
-            })
+        fetch(`https://open.neis.go.kr/hub/schoolInfo?KEY=${API_KEY}&Type=json&SCHUL_NM=${query}`)
+            .then(response => response.json())
             .then(data => {
                 searchResults.innerHTML = "";
                 searchResults.style.display = "block";
 
-                if (data.length === 0) {
+                if (!data.schoolInfo) {
                     searchResults.innerHTML = "<p>검색 결과가 없습니다.</p>";
                     return;
                 }
 
-                const school = data[0];
-                searchResults.innerHTML = `
-                    <p><strong>${school["학교명"]}</strong></p>
-                    <p>설립 구분: ${school["설립 구분"]}</p>
-                    <p>학교 유형: ${school["학교 유형"]}</p>
-                    <p><a href="${school["홈페이지"]}" target="_blank">홈페이지</a></p>
-                    <input type="date" id="meal-date">
-                    <button id="meal-button">급식 메뉴 확인</button>
-                    <div id="meal-menu"></div>
-                `;
-
-                document.getElementById("meal-button").addEventListener("click", function () {
-                    fetchMeal(school["학교코드"], school["교육청코드"]);
-                });
+                const school = data.schoolInfo[1].row[0]; // 첫 번째 검색 결과 사용
+                showSchoolInfo(school);
             })
             .catch(error => console.error("검색 오류 발생: ", error));
     });
 
-    // 🔹 급식 정보 가져오기 함수
+    // 🔹 학교 정보 표시 함수
+    function showSchoolInfo(school) {
+        searchResults.innerHTML = `
+            <p><strong>${school.SCHUL_NM}</strong></p>
+            <p>설립 구분: ${school.FOND_SC_NM}</p>
+            <p>학교 유형: ${school.HS_SC_NM || "정보 없음"}</p>
+            <p><a href="${school.HMPG_ADRES || "#"}" target="_blank">홈페이지</a></p>
+            <input type="date" id="meal-date">
+            <button id="meal-button">급식 메뉴 확인</button>
+            <div id="meal-menu"></div>
+        `;
+
+        document.getElementById("meal-button").addEventListener("click", function () {
+            fetchMeal(school.SD_SCHUL_CODE, school.ATPT_OFCDC_SC_CODE);
+        });
+    }
+
+    // 🔹 급식 정보 가져오기 함수 (NEIS API 사용)
     function fetchMeal(schoolCode, eduOfficeCode) {
         const dateInput = document.getElementById("meal-date");
         const date = dateInput.value.replace(/-/g, "");
@@ -97,23 +100,21 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch(`http://127.0.0.1:5500/get_meal?school_code=${schoolCode}&edu_office_code=${eduOfficeCode}&date=${date}`)
+        const mealApiUrl = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${date}`;
+
+        fetch(mealApiUrl)
             .then(response => response.json())
             .then(data => {
                 const mealMenu = document.getElementById("meal-menu");
                 mealMenu.innerHTML = "";
 
-                if (data.error) {
-                    mealMenu.innerHTML = `<p>${data.error}</p>`;
+                if (!data.mealServiceDietInfo || data.mealServiceDietInfo.length < 2) {
+                    mealMenu.innerHTML = "<p>급식 정보가 없습니다.</p>";
                     return;
                 }
 
-                if (data.mealServiceDietInfo && data.mealServiceDietInfo.length > 1) {
-                    const meals = data.mealServiceDietInfo[1]["row"][0]["DDISH_NM"].replace(/<br\/>/g, "<br>");
-                    mealMenu.innerHTML = `<h3>${date} 급식 정보</h3><p>${meals}</p>`;
-                } else {
-                    mealMenu.innerHTML = "<p>급식 정보가 없습니다.</p>";
-                }
+                const meals = data.mealServiceDietInfo[1].row[0].DDISH_NM.replace(/<br\/>/g, "<br>");
+                mealMenu.innerHTML = `<h3>${date} 급식 정보</h3><p>${meals}</p>`;
             })
             .catch(error => console.error("급식 정보 조회 오류: ", error));
     }
