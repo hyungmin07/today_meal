@@ -1,0 +1,166 @@
+/* style.css - 미니멀 화이트 테마 + 밝은 포인트 컬러 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-top: 6px solid #007BFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1, h2 {
+    color: #222;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* 검색창 & 버튼 */
+.search-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input, button {
+    width: 100%;
+    max-width: 350px;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+input {
+    background-color: #fff;
+    outline: none;
+    font-size: 16px;
+}
+
+input:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 8px rgba(0, 91, 187, 0.2);
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.25s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* 🔹 자동완성 목록 스타일 */
+.autocomplete-suggestions {
+    position: absolute;
+    width: 100%;
+    max-width: 350px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+}
+
+.autocomplete-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* 🔹 검색 결과 스타일 */
+#search-results {
+    display: none;
+    width: 100%;
+    max-width: 350px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* 🔹 급식 정보 조회 버튼 스타일 */
+.school-item button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.school-item button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* 🔹 날짜 입력 필드 가운데 정렬 */
+#meal-date {
+    width: 100%;
+    max-width: 330px;
+    padding: 10px;
+    margin:auto;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    display: block;
+ 
+}
+
+/* 🔹 급식 메뉴 스타일 */
+#meal-menu {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-size: 16px;
+}

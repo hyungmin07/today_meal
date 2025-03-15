@@ -1,0 +1,48 @@
+{
+    "schoolInfo": [
+        {
+            "head": [
+                {
+                    "list_total_count": 1
+                },
+                {
+                    "RESULT": {
+                        "CODE": "INFO-000",
+                        "MESSAGE": "정상 처리되었습니다."
+                    }
+                }
+            ]
+        },
+        {
+            "row": [
+                {
+                    "ATPT_OFCDC_SC_CODE": "B10",
+                    "ATPT_OFCDC_SC_NM": "서울특별시교육청",
+                    "SD_SCHUL_CODE": "7010136",
+                    "SCHUL_NM": "남강고등학교",
+                    "ENG_SCHUL_NM": "Namkang High School",
+                    "SCHUL_KND_SC_NM": "고등학교",
+                    "LCTN_SC_NM": "서울특별시",
+                    "JU_ORG_NM": "서울특별시교육청",
+                    "FOND_SC_NM": "사립",
+                    "ORG_RDNZC": "08854 ",
+                    "ORG_RDNMA": "서울특별시 관악구 난곡로34길 80",
+                    "ORG_RDNDA": "(신림동)",
+                    "ORG_TELNO": "02-839-1701",
+                    "HMPG_ADRES": "http://www.namkang.hs.kr",
+                    "COEDU_SC_NM": "남",
+                    "ORG_FAXNO": "02-839-1707",
+                    "HS_SC_NM": "일반고",
+                    "INDST_SPECL_CCCCL_EXST_YN": "N",
+                    "HS_GNRL_BUSNS_SC_NM": "일반계",
+                    "SPCLY_PURPS_HS_ORD_NM": null,
+                    "ENE_BFE_SEHF_SC_NM": "후기",
+                    "DGHT_SC_NM": "주간",
+                    "FOND_YMD": "19721229",
+                    "FOAS_MEMRD": "19730302",
+                    "LOAD_DTM": "20230615"
+                }
+            ]
+        }
+    ]
+}
