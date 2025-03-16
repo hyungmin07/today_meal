@@ -1,4 +1,4 @@
-/* style.css - 미니멀 화이트 테마 + 밝은 포인트 컬러 */
+/* 🔹 기본 스타일 */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
@@ -33,7 +33,7 @@ h1, h2 {
     text-align: center;
 }
 
-/* 검색창 & 버튼 */
+/* 🔹 검색창 & 버튼 스타일 */
 .search-container {
     width: 100%;
     display: flex;
@@ -141,7 +141,11 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* 🔹 날짜 입력 필드 가운데 정렬 */
+/* 🔹 날짜 입력 필드 스타일 */
+#meal-section.hidden {
+    display: none;
+}
+
 #meal-date {
     width: 100%;
     max-width: 330px;
@@ -153,7 +157,6 @@ button:hover {
     text-align: center;
     outline: none;
     display: block;
- 
 }
 
 /* 🔹 급식 메뉴 스타일 */
@@ -164,6 +167,7 @@ button:hover {
     border-radius: 8px;
     font-size: 16px;
 }
+
 .meal-container p {
     font-size: 16px;
     text-align: center;
@@ -201,6 +205,8 @@ button:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }
-.hidden{
+
+/* 🔹 기본적으로 숨길 요소 */
+.hidden {
     display: none;
 }
