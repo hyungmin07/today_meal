@@ -2,7 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const searchButton = document.getElementById("search-button");
     const searchResults = document.getElementById("search-results");
+    const mealSection = document.getElementById("meal-section"); // 날짜 입력 필드와 버튼을 포함한 영역
     const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f"; // NEIS API 키
+
+    // 🔹 날짜 입력 필드 및 버튼 기본적으로 숨기기
+    mealSection.classList.add("hidden");
 
     // 🔹 자동완성 기능 추가
     const suggestionsContainer = document.createElement("div");
@@ -80,12 +84,12 @@ document.addEventListener("DOMContentLoaded", function () {
             <p>설립 구분: ${school.FOND_SC_NM}</p>
             <p>학교 유형: ${school.HS_SC_NM || "정보 없음"}</p>
             <p><a href="${school.HMPG_ADRES || "#"}" target="_blank">홈페이지</a></p>
-            <p>날짜를 입력하세요</p>
-            <input type="date" id="meal-date">
-            <button id="meal-button">급식 메뉴 확인</button>
-            <div id="meal-menu"></div>
         `;
 
+        // 🔹 날짜 입력 필드와 버튼을 보이게 설정
+        mealSection.classList.remove("hidden");
+
+        // 🔹 급식 메뉴 확인 버튼 클릭 이벤트 추가
         document.getElementById("meal-button").addEventListener("click", function () {
             const selectedDate = document.getElementById("meal-date").value;
             if (!selectedDate) {
