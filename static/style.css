@@ -164,3 +164,40 @@ button:hover {
     border-radius: 8px;
     font-size: 16px;
 }
+.meal-container p {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.meal-container input[type="date"] {
+    width: 100%;
+    max-width: 330px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.meal-container button {
+    width: 100%;
+    max-width: 350px;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.meal-container button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}

@@ -80,27 +80,25 @@ document.addEventListener("DOMContentLoaded", function () {
             <p>설립 구분: ${school.FOND_SC_NM}</p>
             <p>학교 유형: ${school.HS_SC_NM || "정보 없음"}</p>
             <p><a href="${school.HMPG_ADRES || "#"}" target="_blank">홈페이지</a></p>
+            <p>날짜를 입력하세요</p>
             <input type="date" id="meal-date">
             <button id="meal-button">급식 메뉴 확인</button>
             <div id="meal-menu"></div>
         `;
 
         document.getElementById("meal-button").addEventListener("click", function () {
-            fetchMeal(school.SD_SCHUL_CODE, school.ATPT_OFCDC_SC_CODE);
+            const selectedDate = document.getElementById("meal-date").value;
+            if (!selectedDate) {
+                alert("날짜를 입력하세요!");
+                return;
+            }
+            fetchMeal(school.SD_SCHUL_CODE, school.ATPT_OFCDC_SC_CODE, selectedDate);
         });
     }
 
     // 🔹 급식 정보 가져오기 함수 (NEIS API 사용)
-    function fetchMeal(schoolCode, eduOfficeCode) {
-        const dateInput = document.getElementById("meal-date");
-        const date = dateInput.value.replace(/-/g, "");
-
-        if (!date) {
-            alert("날짜를 선택하세요.");
-            return;
-        }
-
-        const mealApiUrl = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${date}`;
+    function fetchMeal(schoolCode, eduOfficeCode, date) {
+        const mealApiUrl = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${date.replace(/-/g, "")}`;
 
         fetch(mealApiUrl)
             .then(response => response.json())
