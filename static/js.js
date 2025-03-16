@@ -89,15 +89,22 @@ document.addEventListener("DOMContentLoaded", function () {
         // 🔹 날짜 입력 필드와 버튼을 보이게 설정
         mealSection.classList.remove("hidden");
 
-        // 🔹 급식 메뉴 확인 버튼 클릭 이벤트 추가
-        document.getElementById("meal-button").addEventListener("click", function () {
-            const selectedDate = document.getElementById("meal-date").value;
-            if (!selectedDate) {
-                alert("날짜를 입력하세요!");
-                return;
+        // 🔹 버튼을 다시 가져와서 이벤트 추가 (HTML이 업데이트된 후 가져와야 함)
+        setTimeout(() => {
+            const mealButton = document.getElementById("meal-button");
+            if (mealButton) {
+                mealButton.addEventListener("click", function () {
+                    const selectedDate = document.getElementById("meal-date").value;
+                    if (!selectedDate) {
+                        alert("날짜를 입력하세요!");
+                        return;
+                    }
+                    fetchMeal(school.SD_SCHUL_CODE, school.ATPT_OFCDC_SC_CODE, selectedDate);
+                });
+            } else {
+                console.error("meal-button 요소를 찾을 수 없습니다.");
             }
-            fetchMeal(school.SD_SCHUL_CODE, school.ATPT_OFCDC_SC_CODE, selectedDate);
-        });
+        }, 100); // 🔹 HTML이 업데이트될 시간을 줌
     }
 
     // 🔹 급식 정보 가져오기 함수 (NEIS API 사용)
