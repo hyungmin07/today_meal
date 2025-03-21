@@ -2,13 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const searchButton = document.getElementById("search-button");
     const searchResults = document.getElementById("search-results");
-    const mealSection = document.getElementById("meal-section"); // 날짜 입력 필드와 버튼을 포함한 영역
-    const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f"; // NEIS API 키
+    const mealSection = document.getElementById("meal-section");
+    const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f";
 
-    // 🔹 날짜 입력 필드 및 버튼 기본적으로 숨기기
     mealSection.classList.add("hidden");
 
-    // 🔹 자동완성 기능 추가
     const suggestionsContainer = document.createElement("div");
     suggestionsContainer.classList.add("autocomplete-suggestions");
     searchInput.parentNode.appendChild(suggestionsContainer);
@@ -21,38 +19,40 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // NEIS API를 사용해 학교 목록 검색
         fetch(`https://open.neis.go.kr/hub/schoolInfo?KEY=${API_KEY}&Type=json&SCHUL_NM=${query}`)
             .then(response => response.json())
             .then(data => {
                 suggestionsContainer.innerHTML = "";
                 if (!data.schoolInfo) return;
 
-                suggestionsContainer.style.display = "block"; // 자동완성 목록 표시
+                suggestionsContainer.style.display = "block";
                 data.schoolInfo[1].row.forEach(school => {
                     const suggestion = document.createElement("div");
                     suggestion.classList.add("autocomplete-item");
                     suggestion.textContent = school.SCHUL_NM;
-                    suggestion.addEventListener("click", function () {
+
+                    suggestion.addEventListener("mousedown", function (e) {
+                        e.preventDefault(); // blur 이벤트보다 먼저 실행되도록
                         searchInput.value = school.SCHUL_NM;
                         suggestionsContainer.innerHTML = "";
-                        suggestionsContainer.style.display = "none"; // 자동완성 목록 숨기기
+                        suggestionsContainer.style.display = "none";
                         showSchoolInfo(school);
                     });
+
                     suggestionsContainer.appendChild(suggestion);
                 });
             })
             .catch(error => console.error("자동완성 오류 발생: ", error));
     });
 
-    // 🔹 입력 필드 포커스 해제 시 자동완성 목록 숨기기
+    // blur 시 자동완성 숨기기 (클릭보다 나중에 실행되게 setTimeout 사용)
     searchInput.addEventListener("blur", function () {
         setTimeout(() => {
+            suggestionsContainer.innerHTML = "";
             suggestionsContainer.style.display = "none";
-        }, 200); // 클릭 이벤트가 먼저 실행될 수 있도록 딜레이 추가
+        }, 150);
     });
 
-    // 🔹 검색 버튼 클릭 시 검색 결과 표시
     searchButton.addEventListener("click", function () {
         const query = searchInput.value.trim();
         if (!query) {
@@ -71,13 +71,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                const school = data.schoolInfo[1].row[0]; // 첫 번째 검색 결과 사용
+                const school = data.schoolInfo[1].row[0];
                 showSchoolInfo(school);
             })
             .catch(error => console.error("검색 오류 발생: ", error));
     });
 
-    // 🔹 학교 정보 표시 함수
     function showSchoolInfo(school) {
         searchResults.innerHTML = `
             <p><strong>${school.SCHUL_NM}</strong></p>
@@ -86,10 +85,8 @@ document.addEventListener("DOMContentLoaded", function () {
             <p><a href="${school.HMPG_ADRES || "#"}" target="_blank">홈페이지</a></p>
         `;
 
-        // 🔹 날짜 입력 필드와 버튼을 보이게 설정
         mealSection.classList.remove("hidden");
 
-        // 🔹 meal-button이 정상적으로 생성된 후 이벤트 추가
         setTimeout(() => {
             const mealButton = document.getElementById("meal-button");
             if (mealButton) {
@@ -104,10 +101,9 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 console.error("meal-button 요소를 찾을 수 없습니다.");
             }
-        }, 300); // 🔹 HTML이 업데이트될 시간을 줌
+        }, 300);
     }
 
-    // 🔹 급식 정보 가져오기 함수 (NEIS API 사용)
     function fetchMeal(schoolCode, eduOfficeCode, date) {
         const mealApiUrl = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${date.replace(/-/g, "")}`;
 
