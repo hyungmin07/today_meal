@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 closeAllSuggestions();
 
                 if (!data.schoolInfo) return;
-                const rows = data.schoolInfo[1].row.slice(0, 5); // 최대 5개만
+                const rows = data.schoolInfo[1].row.slice(0, 5); // 최대 5개만 표시
 
-                rows.forEach((school, index) => {
+                rows.forEach((school) => {
                     const suggestion = document.createElement("div");
                     suggestion.classList.add("autocomplete-item");
                     suggestion.textContent = school.SCHUL_NM;
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 키보드 이동 처리
     searchInput.addEventListener("keydown", function (e) {
-        let items = suggestionsContainer.getElementsByClassName("autocomplete-item");
+        const items = suggestionsContainer.getElementsByClassName("autocomplete-item");
         if (e.key === "ArrowDown") {
             currentFocus++;
             addActive(items);
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function addActive(items) {
-        if (!items) return false;
+        if (!items) return;
         removeActive(items);
         if (currentFocus >= items.length) currentFocus = 0;
         if (currentFocus < 0) currentFocus = items.length - 1;
@@ -72,14 +72,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function removeActive(items) {
-        for (let item of items) {
-            item.classList.remove("autocomplete-active");
+        for (let i = 0; i < items.length; i++) {
+            items[i].classList.remove("autocomplete-active");
         }
     }
 
     function closeAllSuggestions() {
         suggestionsContainer.innerHTML = "";
-        suggestionsContainer.style.display = "block";
         currentFocus = -1;
     }
 
@@ -109,11 +108,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const school = data.schoolInfo[1].row[0];
                 showSchoolInfo(school);
+                mealSection.classList.remove("hidden");  // 검색 버튼 클릭 시에도 표시되게
             })
             .catch(error => console.error("검색 오류 발생: ", error));
     });
 
-    // 학교 정보 보여주기
     function showSchoolInfo(school) {
         searchResults.innerHTML = `
             <p><strong>${school.SCHUL_NM}</strong></p>
@@ -139,7 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 300);
     }
 
-    // 급식 조회
     function fetchMeal(schoolCode, eduOfficeCode, date) {
         const mealApiUrl = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${date.replace(/-/g, "")}`;
 
