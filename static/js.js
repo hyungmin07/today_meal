@@ -5,37 +5,38 @@ document.addEventListener("DOMContentLoaded", function () {
     const mealSection = document.getElementById("meal-section");
     const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f";
 
-    mealSection.classList.add("hidden");
-
+    let currentFocus = -1;
     const suggestionsContainer = document.createElement("div");
     suggestionsContainer.classList.add("autocomplete-suggestions");
     searchInput.parentNode.appendChild(suggestionsContainer);
 
+    mealSection.classList.add("hidden");
+
+    // 자동완성 검색
     searchInput.addEventListener("input", function () {
         const query = searchInput.value.trim();
         if (query.length === 0) {
-            suggestionsContainer.innerHTML = "";
-            suggestionsContainer.style.display = "none";
+            closeAllSuggestions();
             return;
         }
 
         fetch(`https://open.neis.go.kr/hub/schoolInfo?KEY=${API_KEY}&Type=json&SCHUL_NM=${query}`)
             .then(response => response.json())
             .then(data => {
-                suggestionsContainer.innerHTML = "";
-                if (!data.schoolInfo) return;
+                closeAllSuggestions();
 
-                suggestionsContainer.style.display = "block";
-                data.schoolInfo[1].row.forEach(school => {
+                if (!data.schoolInfo) return;
+                const rows = data.schoolInfo[1].row.slice(0, 5); // 최대 5개만
+
+                rows.forEach((school, index) => {
                     const suggestion = document.createElement("div");
                     suggestion.classList.add("autocomplete-item");
                     suggestion.textContent = school.SCHUL_NM;
 
                     suggestion.addEventListener("mousedown", function (e) {
-                        e.preventDefault(); // blur 이벤트보다 먼저 실행되도록
+                        e.preventDefault();
                         searchInput.value = school.SCHUL_NM;
-                        suggestionsContainer.innerHTML = "";
-                        suggestionsContainer.style.display = "none";
+                        closeAllSuggestions();
                         showSchoolInfo(school);
                     });
 
@@ -45,14 +46,49 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("자동완성 오류 발생: ", error));
     });
 
-    // blur 시 자동완성 숨기기 (클릭보다 나중에 실행되게 setTimeout 사용)
-    searchInput.addEventListener("blur", function () {
-        setTimeout(() => {
-            suggestionsContainer.innerHTML = "";
-            suggestionsContainer.style.display = "none";
-        }, 150);
+    // 키보드 이동 처리
+    searchInput.addEventListener("keydown", function (e) {
+        let items = suggestionsContainer.getElementsByClassName("autocomplete-item");
+        if (e.key === "ArrowDown") {
+            currentFocus++;
+            addActive(items);
+        } else if (e.key === "ArrowUp") {
+            currentFocus--;
+            addActive(items);
+        } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (currentFocus > -1 && items[currentFocus]) {
+                items[currentFocus].click();
+            }
+        }
     });
 
+    function addActive(items) {
+        if (!items) return false;
+        removeActive(items);
+        if (currentFocus >= items.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = items.length - 1;
+        items[currentFocus].classList.add("autocomplete-active");
+    }
+
+    function removeActive(items) {
+        for (let item of items) {
+            item.classList.remove("autocomplete-active");
+        }
+    }
+
+    function closeAllSuggestions() {
+        suggestionsContainer.innerHTML = "";
+        suggestionsContainer.style.display = "block";
+        currentFocus = -1;
+    }
+
+    // blur 시 자동완성 닫기
+    searchInput.addEventListener("blur", function () {
+        setTimeout(closeAllSuggestions, 150);
+    });
+
+    // 검색 버튼 클릭 시
     searchButton.addEventListener("click", function () {
         const query = searchInput.value.trim();
         if (!query) {
@@ -66,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 searchResults.innerHTML = "";
                 searchResults.style.display = "block";
 
-                if (!data.schoolInfo) {
+                if (!data.schoolInfo || !data.schoolInfo[1]?.row?.length) {
                     searchResults.innerHTML = "<p>검색 결과가 없습니다.</p>";
                     return;
                 }
@@ -77,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("검색 오류 발생: ", error));
     });
 
+    // 학교 정보 보여주기
     function showSchoolInfo(school) {
         searchResults.innerHTML = `
             <p><strong>${school.SCHUL_NM}</strong></p>
@@ -98,12 +135,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     fetchMeal(school.SD_SCHUL_CODE, school.ATPT_OFCDC_SC_CODE, selectedDate);
                 });
-            } else {
-                console.error("meal-button 요소를 찾을 수 없습니다.");
             }
         }, 300);
     }
 
+    // 급식 조회
     function fetchMeal(schoolCode, eduOfficeCode, date) {
         const mealApiUrl = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${date.replace(/-/g, "")}`;
 

@@ -210,3 +210,7 @@ button:hover {
 .hidden {
     display: none;
 }
+.autocomplete-active {
+    background-color: #007BFF;
+    color: white;
+}
