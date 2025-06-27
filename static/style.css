@@ -199,3 +199,11 @@ button:hover {
         font-size: 15px;
     }
 }
+#menu a {
+  display: inline-block;         /* 가로 정렬 유지 */
+  white-space: nowrap;           /* 줄바꿈 금지 */
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
