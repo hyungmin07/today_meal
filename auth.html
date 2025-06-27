@@ -8,6 +8,72 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+
+  <style>
+    /* 추가 스타일 */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      padding: 14px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: #6777ef;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #5661d1;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .tab-buttons button {
+      flex: 1;
+    }
+
+    .tab-buttons button.active {
+      background-color: #5661d1;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 80px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <!-- 햄버거 메뉴 -->
@@ -46,19 +112,21 @@
       <button onclick="showTab('signup')">📨 회원가입</button>
     </div>
 
-    <div id="login-form">
+    <!-- 로그인 폼 -->
+    <div id="login-form" class="form-group">
       <input type="email" id="login-email" placeholder="이메일">
       <input type="password" id="login-password" placeholder="비밀번호">
       <button onclick="login()">로그인</button>
     </div>
 
-    <div id="signup-form" style="display: none;">
+    <!-- 회원가입 폼 -->
+    <div id="signup-form" class="form-group" style="display: none;">
       <input type="email" id="signup-email" placeholder="이메일">
       <input type="password" id="signup-password" placeholder="비밀번호 (6자 이상)">
       <button onclick="signup()">회원가입</button>
     </div>
 
-    <div class="message" id="msg"></div>
+    <div class="message" id="msg" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
   </div>
 
   <script>
@@ -75,8 +143,8 @@
     const auth = firebase.auth();
 
     function showTab(tab) {
-      document.getElementById("login-form").style.display = (tab === "login") ? "block" : "none";
-      document.getElementById("signup-form").style.display = (tab === "signup") ? "block" : "none";
+      document.getElementById("login-form").style.display = (tab === "login") ? "flex" : "none";
+      document.getElementById("signup-form").style.display = (tab === "signup") ? "flex" : "none";
 
       const buttons = document.querySelectorAll(".tab-buttons button");
       buttons.forEach(btn => btn.classList.remove("active"));
@@ -116,7 +184,6 @@
         });
     }
 
-    // 햄버거 메뉴 토글
     document.addEventListener("DOMContentLoaded", () => {
       const hamburger = document.getElementById("hamburger");
       const menu = document.getElementById("menu");
