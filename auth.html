@@ -10,12 +10,11 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #f9f9f9;
+      background-color: #eef5ff;
       margin: 0;
       padding: 0;
     }
 
-    /* 햄버거 메뉴 */
     #hamburger {
       position: absolute;
       top: 20px;
@@ -34,27 +33,26 @@
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 10px 0;
+      padding: 10px 15px;
+      white-space: nowrap;
       min-width: 160px;
       text-align: center;
     }
 
     #menu a {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 8px 16px;
       text-decoration: none;
       color: #333;
       font-size: 14px;
-    }
-
-    #menu a:hover {
-      background-color: #f1f1f1;
+      font-weight: bold;
+      white-space: nowrap;
     }
 
     .container {
       max-width: 400px;
       background: white;
-      margin: 100px auto;
+      margin: 120px auto;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -64,6 +62,9 @@
     .tab-buttons {
       display: flex;
       margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px #ddd;
     }
 
     .tab-buttons button {
@@ -72,11 +73,11 @@
       border: none;
       font-weight: bold;
       cursor: pointer;
-      background-color: #eee;
+      background-color: #f0f0f0;
     }
 
     .tab-buttons button.active {
-      background-color: #007BFF;
+      background-color: #5d6dff;
       color: white;
     }
 
@@ -86,17 +87,19 @@
       margin: 8px 0;
       border-radius: 8px;
       border: 1px solid #ccc;
+      font-size: 15px;
     }
 
     button.action {
       width: 100%;
       padding: 12px;
-      background: #007BFF;
+      background: #5d6dff;
       color: white;
       border: none;
       border-radius: 8px;
       margin-top: 10px;
       font-weight: bold;
+      font-size: 15px;
       cursor: pointer;
     }
 
@@ -121,7 +124,6 @@
     <button id="signup-tab">📝 회원가입</button>
   </div>
 
-  <!-- 로그인 폼 -->
   <div id="login-form">
     <input type="email" id="login-email" placeholder="이메일"><br>
     <input type="password" id="login-password" placeholder="비밀번호"><br>
@@ -129,7 +131,6 @@
     <div class="message" id="login-message"></div>
   </div>
 
-  <!-- 회원가입 폼 -->
   <div id="signup-form" style="display: none;">
     <input type="email" id="signup-email" placeholder="이메일"><br>
     <input type="password" id="signup-password" placeholder="비밀번호 (6자 이상)"><br>
@@ -196,7 +197,6 @@
     document.getElementById("login-tab").classList.remove("active");
   };
 
-  // 햄버거 메뉴 열고 닫기
   document.getElementById("hamburger").onclick = () => {
     const menu = document.getElementById("menu");
     menu.style.display = (menu.style.display === "block") ? "none" : "block";
