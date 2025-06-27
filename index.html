@@ -18,12 +18,30 @@
 </head>
 <body>
   
-    <div style="position: absolute; top: 20px; right: 20px; z-index: 999;">
-  <div id="hamburger" style="font-size: 24px; cursor: pointer;">☰</div>
-  <div id="menu" style="display: none; position: absolute; top: 35px; right: 0; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-    <a href="auth.html" style="display: block; padding: 10px 20px; text-decoration: none; color: #333;"> 로그인/회원가입</a>
-    <!-- 나중에 메뉴 추가 가능 -->
-  </div>
+ <div id="hamburger" style="position: absolute; top: 20px; right: 20px; font-size: 26px; cursor: pointer; z-index: 1000;">☰</div>
+<div id="menu" style="
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 10px 15px;
+  white-space: nowrap;
+  min-width: 160px;
+  text-align: center;
+">
+  <a href="auth.html" style="
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+  ">🔑 로그인/회원가입</a>
 </div>
 
     <div class="container">
