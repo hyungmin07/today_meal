@@ -3,42 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <title>로그인 / 회원가입 - 오늘의 급식</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
   <style>
     body {
-      font-family: 'sans-serif';
-      background: #f4f4f4;
-      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9f9;
       margin: 0;
+      padding: 0;
     }
 
-    nav {
-      background-color: #007BFF;
-      padding: 12px 0;
+    /* 햄버거 메뉴 */
+    #hamburger {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 26px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 20px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 10px 0;
+      min-width: 160px;
       text-align: center;
     }
 
-    nav a {
-      color: white;
-      margin: 0 15px;
+    #menu a {
+      display: inline-block;
+      padding: 10px 20px;
       text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
+      color: #333;
+      font-size: 14px;
+    }
+
+    #menu a:hover {
+      background-color: #f1f1f1;
     }
 
     .container {
-      background: white;
       max-width: 400px;
-      margin: 50px auto;
+      background: white;
+      margin: 100px auto;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
     }
 
     .tab-buttons {
       display: flex;
-      justify-content: space-around;
       margin-bottom: 20px;
     }
 
@@ -85,15 +109,12 @@
 </head>
 <body>
 
-<!-- 상단 메뉴 -->
-<nav>
-  <a href="index.html">🏠 홈</a>
-  <a href="auth.html">👤 계정</a>
-  <a href="upload.html">📸 사진 업로드</a>
-  <a href="popular.html">🌟 인기 급식</a>
-</nav>
+<!-- 햄버거 메뉴 -->
+<div id="hamburger">&#9776;</div>
+<div id="menu">
+  <a href="auth.html">🔑 로그인 / 회원가입</a>
+</div>
 
-<!-- 로그인 / 회원가입 박스 -->
 <div class="container">
   <div class="tab-buttons">
     <button id="login-tab" class="active">🔑 로그인</button>
@@ -118,7 +139,6 @@
 </div>
 
 <script>
-  // Firebase 설정
   const firebaseConfig = {
     apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
     authDomain: "todaymeal-19430.firebaseapp.com",
@@ -130,14 +150,13 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  // 로그인 함수
   function login() {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
     const msg = document.getElementById("login-message");
 
     auth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
+      .then(() => {
         msg.innerText = "✅ 로그인 성공!";
         msg.style.color = "green";
       })
@@ -147,14 +166,13 @@
       });
   }
 
-  // 회원가입 함수
   function signup() {
     const email = document.getElementById("signup-email").value;
     const password = document.getElementById("signup-password").value;
     const msg = document.getElementById("signup-message");
 
     auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
+      .then(() => {
         msg.innerText = "✅ 회원가입 성공!";
         msg.style.color = "green";
       })
@@ -164,7 +182,6 @@
       });
   }
 
-  // 탭 전환
   document.getElementById("login-tab").onclick = () => {
     document.getElementById("login-form").style.display = "block";
     document.getElementById("signup-form").style.display = "none";
@@ -178,6 +195,20 @@
     document.getElementById("signup-tab").classList.add("active");
     document.getElementById("login-tab").classList.remove("active");
   };
+
+  // 햄버거 메뉴 열고 닫기
+  document.getElementById("hamburger").onclick = () => {
+    const menu = document.getElementById("menu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+  };
+
+  document.addEventListener("click", (e) => {
+    const menu = document.getElementById("menu");
+    const hamburger = document.getElementById("hamburger");
+    if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
+      menu.style.display = "none";
+    }
+  });
 </script>
 </body>
 </html>
