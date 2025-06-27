@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인 / 회원가입 - 오늘의 급식</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <style>
+    body {
+      font-family: 'sans-serif';
+      background: #f4f4f4;
+      text-align: center;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #007BFF;
+      padding: 12px 0;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .container {
+      background: white;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .tab-buttons button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #eee;
+    }
+
+    .tab-buttons button.active {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button.action {
+      width: 100%;
+      padding: 12px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 상단 메뉴 -->
+<nav>
+  <a href="index.html">🏠 홈</a>
+  <a href="auth.html">👤 계정</a>
+  <a href="upload.html">📸 사진 업로드</a>
+  <a href="popular.html">🌟 인기 급식</a>
+</nav>
+
+<!-- 로그인 / 회원가입 박스 -->
+<div class="container">
+  <div class="tab-buttons">
+    <button id="login-tab" class="active">🔑 로그인</button>
+    <button id="signup-tab">📝 회원가입</button>
+  </div>
+
+  <!-- 로그인 폼 -->
+  <div id="login-form">
+    <input type="email" id="login-email" placeholder="이메일"><br>
+    <input type="password" id="login-password" placeholder="비밀번호"><br>
+    <button class="action" onclick="login()">로그인</button>
+    <div class="message" id="login-message"></div>
+  </div>
+
+  <!-- 회원가입 폼 -->
+  <div id="signup-form" style="display: none;">
+    <input type="email" id="signup-email" placeholder="이메일"><br>
+    <input type="password" id="signup-password" placeholder="비밀번호 (6자 이상)"><br>
+    <button class="action" onclick="signup()">회원가입</button>
+    <div class="message" id="signup-message"></div>
+  </div>
+</div>
+
+<script>
+  // Firebase 설정
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
+    authDomain: "todaymeal-19430.firebaseapp.com",
+    projectId: "todaymeal-19430",
+    storageBucket: "todaymeal-19430.appspot.com",
+    messagingSenderId: "709245069596",
+    appId: "1:709245069596:web:1eb199ebc794d27e132d9"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // 로그인 함수
+  function login() {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+    const msg = document.getElementById("login-message");
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        msg.innerText = "✅ 로그인 성공!";
+        msg.style.color = "green";
+      })
+      .catch((error) => {
+        msg.innerText = "❌ " + error.message;
+        msg.style.color = "red";
+      });
+  }
+
+  // 회원가입 함수
+  function signup() {
+    const email = document.getElementById("signup-email").value;
+    const password = document.getElementById("signup-password").value;
+    const msg = document.getElementById("signup-message");
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        msg.innerText = "✅ 회원가입 성공!";
+        msg.style.color = "green";
+      })
+      .catch((error) => {
+        msg.innerText = "❌ " + error.message;
+        msg.style.color = "red";
+      });
+  }
+
+  // 탭 전환
+  document.getElementById("login-tab").onclick = () => {
+    document.getElementById("login-form").style.display = "block";
+    document.getElementById("signup-form").style.display = "none";
+    document.getElementById("login-tab").classList.add("active");
+    document.getElementById("signup-tab").classList.remove("active");
+  };
+
+  document.getElementById("signup-tab").onclick = () => {
+    document.getElementById("login-form").style.display = "none";
+    document.getElementById("signup-form").style.display = "block";
+    document.getElementById("signup-tab").classList.add("active");
+    document.getElementById("login-tab").classList.remove("active");
+  };
+</script>
+</body>
+</html>

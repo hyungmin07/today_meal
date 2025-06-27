@@ -17,6 +17,15 @@
 <meta property="og:type" content="website">
 </head>
 <body>
+  
+    <div style="position: absolute; top: 20px; right: 20px; z-index: 999;">
+  <div id="hamburger" style="font-size: 24px; cursor: pointer;">☰</div>
+  <div id="menu" style="display: none; position: absolute; top: 35px; right: 0; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <a href="auth.html" style="display: block; padding: 10px 20px; text-decoration: none; color: #333;"> 로그인/회원가입</a>
+    <!-- 나중에 메뉴 추가 가능 -->
+  </div>
+</div>
+
     <div class="container">
         <h1>학교 검색</h1>
         <div class="search-container">
@@ -33,6 +42,27 @@
             <div id="meal-menu"></div>
         </div>
     </div>
- <script src="static/js.js"></script>
+ 
+ 
+ <script>
+  // 햄버거 메뉴 토글
+  document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.getElementById("hamburger");
+    const menu = document.getElementById("menu");
+
+    hamburger.addEventListener("click", () => {
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
+    // 바깥 클릭 시 닫기
+    document.addEventListener("click", (e) => {
+      if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    });
+  });
+</script>
+ 
+    <script src="static/js.js"></script>
 </body>
 </html>
