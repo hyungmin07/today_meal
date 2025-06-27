@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입 - 오늘의 급식</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 12px 20px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>📌 회원가입</h2>
+
+  <input type="email" id="email" placeholder="이메일 주소"><br>
+  <input type="password" id="password" placeholder="비밀번호 (6자 이상)"><br>
+  <button onclick="signup()">가입하기</button>
+
+  <div class="message" id="msg"></div>
+
+  <script>
+    // 🔐 너의 Firebase 설정 정보 (복사해서 붙여넣기!)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
+      authDomain: "todaymeal-19430.firebaseapp.com",
+      projectId: "todaymeal-19430",
+      storageBucket: "todaymeal-19430.appspot.com",
+      messagingSenderId: "709245069596",
+      appId: "1:709245069596:web:1eb199ebc794d27e132d9"
+    };
+
+    // Firebase 초기화
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // 회원가입 함수
+    function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const msg = document.getElementById("msg");
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          msg.innerText = "✅ 회원가입 성공! 로그인 페이지로 이동해 주세요.";
+          msg.style.color = "green";
+        })
+        .catch((error) => {
+          msg.innerText = "❌ " + error.message;
+          msg.style.color = "red";
+        });
+    }
+  </script>
+</body>
+</html>
