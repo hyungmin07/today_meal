@@ -5,19 +5,17 @@
   <title>로그인 / 회원가입 - 오늘의 급식</title>
   <link rel="stylesheet" href="static/style.css">
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <!-- Firebase SDK (compat 버전 사용) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
   <style>
-    /* 추가 스타일 */
     .form-group {
       display: flex;
       flex-direction: column;
       gap: 12px;
       margin-top: 20px;
     }
-
     input[type="email"],
     input[type="password"] {
       padding: 14px;
@@ -27,7 +25,6 @@
       width: 100%;
       box-sizing: border-box;
     }
-
     button {
       width: 100%;
       padding: 14px;
@@ -40,25 +37,20 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-
     button:hover {
       background-color: #5661d1;
     }
-
     .tab-buttons {
       display: flex;
       gap: 12px;
       margin-bottom: 12px;
     }
-
     .tab-buttons button {
       flex: 1;
     }
-
     .tab-buttons button.active {
       background-color: #5661d1;
     }
-
     .container {
       max-width: 400px;
       margin: 80px auto;
@@ -67,11 +59,14 @@
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-
     h2 {
       text-align: center;
       margin-bottom: 30px;
       font-weight: bold;
+    }
+    .logout-section {
+      text-align: center;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -79,19 +74,19 @@
   <!-- 햄버거 메뉴 -->
   <div id="hamburger" style="position: absolute; top: 20px; right: 20px; font-size: 26px; cursor: pointer; z-index: 1000;">☰</div>
   <div id="menu" style="
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 20px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      padding: 10px 15px;
-      white-space: nowrap;
-      min-width: 160px;
-      text-align: center;
-      z-index: 999;
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 15px;
+    white-space: nowrap;
+    min-width: 160px;
+    text-align: center;
+    z-index: 999;
   ">
     <a href="auth.html" style="
       display: inline-block;
@@ -106,7 +101,6 @@
 
   <div class="container">
     <h2>로그인 또는 회원가입</h2>
-
     <div class="tab-buttons">
       <button class="active" onclick="showTab('login')">🔐 로그인</button>
       <button onclick="showTab('signup')">📨 회원가입</button>
@@ -126,71 +120,109 @@
       <button onclick="signup()">회원가입</button>
     </div>
 
+    <div class="logout-section" id="logout-section" style="display: none;">
+      <p><strong id="user-email"></strong> 님 환영합니다 👋</p>
+      <button onclick="logout()">로그아웃</button>
+    </div>
+
     <div class="message" id="msg" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
   </div>
 
- <!-- Firebase SDK 로드 (CDN 방식) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
+      authDomain: "todaymeal-19430.firebaseapp.com",
+      projectId: "todaymeal-19430",
+      storageBucket: "todaymeal-19430.appspot.com",
+      messagingSenderId: "709245069596",
+      appId: "1:709245069596:web:1eb199ebc794d27e132d9"
+    };
 
-<script>
-  // Firebase 설정
-  const firebaseConfig = {
-    apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
-    authDomain: "todaymeal-19430.firebaseapp.com",
-    projectId: "todaymeal-19430",
-    storageBucket: "todaymeal-19430.appspot.com",
-    messagingSenderId: "709245069596",
-    appId: "1:709245069596:web:1eb199ebc794d27e132d9"
-  };
+    // Firebase 초기화
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-  // Firebase 초기화
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+    // 탭 전환
+    function showTab(tab) {
+      document.getElementById("login-form").style.display = tab === "login" ? "flex" : "none";
+      document.getElementById("signup-form").style.display = tab === "signup" ? "flex" : "none";
 
-  // 로그인
-  function login() {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-    const msg = document.getElementById("msg");
+      const buttons = document.querySelectorAll(".tab-buttons button");
+      buttons.forEach(btn => btn.classList.remove("active"));
+      if (tab === "login") buttons[0].classList.add("active");
+      else buttons[1].classList.add("active");
 
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        msg.innerText = "✅ 로그인 성공!";
-        msg.style.color = "green";
-      })
-      .catch((error) => {
-        msg.innerText = "❌ " + error.message;
-        msg.style.color = "red";
-      });
-  }
-
-  // 회원가입
-  function signup() {
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
-    const msg = document.getElementById("msg");
-
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        msg.innerText = "✅ 회원가입 성공!";
-        msg.style.color = "green";
-      })
-      .catch((error) => {
-        msg.innerText = "❌ " + error.message;
-        msg.style.color = "red";
-      });
-  }
-
-  // 로그인 상태 감지
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      console.log("🔓 로그인 중:", user.email);
-    } else {
-      console.log("🔒 로그인 안됨");
+      document.getElementById("msg").innerText = "";
     }
-  });
-</script>
 
+    // 로그인
+    function login() {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      const msg = document.getElementById("msg");
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          msg.innerText = "✅ 로그인 성공!";
+          msg.style.color = "green";
+        })
+        .catch((error) => {
+          msg.innerText = "❌ " + error.message;
+          msg.style.color = "red";
+        });
+    }
+
+    // 회원가입
+    function signup() {
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      const msg = document.getElementById("msg");
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          msg.innerText = "✅ 회원가입 성공!";
+          msg.style.color = "green";
+        })
+        .catch((error) => {
+          msg.innerText = "❌ " + error.message;
+          msg.style.color = "red";
+        });
+    }
+
+    // 로그아웃
+    function logout() {
+      auth.signOut();
+    }
+
+    // 로그인 상태 감지
+    auth.onAuthStateChanged((user) => {
+      const logoutSection = document.getElementById("logout-section");
+      const userEmail = document.getElementById("user-email");
+      if (user) {
+        logoutSection.style.display = "block";
+        userEmail.innerText = user.email;
+      } else {
+        logoutSection.style.display = "none";
+        userEmail.innerText = "";
+      }
+    });
+
+    // 햄버거 메뉴 토글
+    document.addEventListener("DOMContentLoaded", () => {
+      const hamburger = document.getElementById("hamburger");
+      const menu = document.getElementById("menu");
+
+      hamburger.addEventListener("click", () => {
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
+          menu.style.display = "none";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
