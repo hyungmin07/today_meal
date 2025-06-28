@@ -129,75 +129,68 @@
     <div class="message" id="msg" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
   </div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
-      authDomain: "todaymeal-19430.firebaseapp.com",
-      projectId: "todaymeal-19430",
-      storageBucket: "todaymeal-19430.appspot.com",
-      messagingSenderId: "709245069596",
-      appId: "1:709245069596:web:1eb199ebc794d27e132d9"
-    };
+ <!-- Firebase SDK 로드 (CDN 방식) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+<script>
+  // Firebase 설정
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
+    authDomain: "todaymeal-19430.firebaseapp.com",
+    projectId: "todaymeal-19430",
+    storageBucket: "todaymeal-19430.appspot.com",
+    messagingSenderId: "709245069596",
+    appId: "1:709245069596:web:1eb199ebc794d27e132d9"
+  };
 
-    function showTab(tab) {
-      document.getElementById("login-form").style.display = (tab === "login") ? "flex" : "none";
-      document.getElementById("signup-form").style.display = (tab === "signup") ? "flex" : "none";
+  // Firebase 초기화
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-      const buttons = document.querySelectorAll(".tab-buttons button");
-      buttons.forEach(btn => btn.classList.remove("active"));
-      document.querySelector(`.tab-buttons button[onclick="showTab('${tab}')"]`).classList.add("active");
-    }
+  // 로그인
+  function login() {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+    const msg = document.getElementById("msg");
 
-    function signup() {
-      const email = document.getElementById("signup-email").value;
-      const password = document.getElementById("signup-password").value;
-      const msg = document.getElementById("msg");
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          msg.innerText = "✅ 회원가입 성공! 로그인해주세요.";
-          msg.style.color = "green";
-          showTab('login');
-        })
-        .catch((error) => {
-          msg.innerText = "❌ " + error.message;
-          msg.style.color = "red";
-        });
-    }
-
-    function login() {
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-      const msg = document.getElementById("msg");
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          msg.innerText = "✅ 로그인 성공!";
-          msg.style.color = "green";
-        })
-        .catch((error) => {
-          msg.innerText = "❌ " + error.message;
-          msg.style.color = "red";
-        });
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const hamburger = document.getElementById("hamburger");
-      const menu = document.getElementById("menu");
-
-      hamburger.addEventListener("click", () => {
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        msg.innerText = "✅ 로그인 성공!";
+        msg.style.color = "green";
+      })
+      .catch((error) => {
+        msg.innerText = "❌ " + error.message;
+        msg.style.color = "red";
       });
+  }
 
-      document.addEventListener("click", (e) => {
-        if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
-          menu.style.display = "none";
-        }
+  // 회원가입
+  function signup() {
+    const email = document.getElementById("signup-email").value;
+    const password = document.getElementById("signup-password").value;
+    const msg = document.getElementById("msg");
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        msg.innerText = "✅ 회원가입 성공!";
+        msg.style.color = "green";
+      })
+      .catch((error) => {
+        msg.innerText = "❌ " + error.message;
+        msg.style.color = "red";
       });
-    });
-  </script>
+  }
+
+  // 로그인 상태 감지
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      console.log("🔓 로그인 중:", user.email);
+    } else {
+      console.log("🔒 로그인 안됨");
+    }
+  });
+</script>
+
 </body>
 </html>
