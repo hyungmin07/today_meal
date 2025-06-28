@@ -5,6 +5,9 @@
   <title>로그인 / 회원가입 - 오늘의 급식</title>
   <link rel="stylesheet" href="static/style.css">
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
   <style>
     .form-group {
@@ -125,8 +128,8 @@
     <div class="message" id="msg" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
   </div>
 
-  <script>
-    // Firebase 설정
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
     const firebaseConfig = {
       apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
       authDomain: "todaymeal-19430.firebaseapp.com",
@@ -140,21 +143,8 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // 탭 전환
-    function showTab(tab) {
-      document.getElementById("login-form").style.display = tab === "login" ? "flex" : "none";
-      document.getElementById("signup-form").style.display = tab === "signup" ? "flex" : "none";
-
-      const buttons = document.querySelectorAll(".tab-buttons button");
-      buttons.forEach(btn => btn.classList.remove("active"));
-      if (tab === "login") buttons[0].classList.add("active");
-      else buttons[1].classList.add("active");
-
-      document.getElementById("msg").innerText = "";
-    }
-
-    // 로그인
-    function login() {
+    // 로그인, 회원가입, 로그아웃 함수 정의
+    window.login = function () {
       const email = document.getElementById("login-email").value;
       const password = document.getElementById("login-password").value;
       const msg = document.getElementById("msg");
@@ -168,10 +158,9 @@
           msg.innerText = "❌ " + error.message;
           msg.style.color = "red";
         });
-    }
+    };
 
-    // 회원가입
-    function signup() {
+    window.signup = function () {
       const email = document.getElementById("signup-email").value;
       const password = document.getElementById("signup-password").value;
       const msg = document.getElementById("msg");
@@ -185,12 +174,11 @@
           msg.innerText = "❌ " + error.message;
           msg.style.color = "red";
         });
-    }
+    };
 
-    // 로그아웃
-    function logout() {
+    window.logout = function () {
       auth.signOut();
-    }
+    };
 
     // 로그인 상태 감지
     auth.onAuthStateChanged((user) => {
@@ -204,22 +192,8 @@
         userEmail.innerText = "";
       }
     });
+  });
+</script>
 
-    // 햄버거 메뉴 토글
-    document.addEventListener("DOMContentLoaded", () => {
-      const hamburger = document.getElementById("hamburger");
-      const menu = document.getElementById("menu");
-
-      hamburger.addEventListener("click", () => {
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
-      });
-
-      document.addEventListener("click", (e) => {
-        if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
-          menu.style.display = "none";
-        }
-      });
-    });
-  </script>
 </body>
 </html>
