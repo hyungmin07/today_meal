@@ -3,133 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <title>로그인 / 회원가입 - 오늘의 급식</title>
-  <link rel="stylesheet" href="static/style.css">
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 20px;
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #eef5ff;
+      margin: 0;
+      padding: 0;
     }
-    input[type="email"],
-    input[type="password"] {
-      padding: 14px;
-      font-size: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
-      border: none;
-      border-radius: 8px;
-      background-color: #6777ef;
-      color: white;
-      font-weight: bold;
+
+    #hamburger {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 26px;
       cursor: pointer;
-      transition: background 0.3s;
+      z-index: 1000;
     }
-    button:hover {
-      background-color: #5661d1;
-    }
-    .tab-buttons {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .tab-buttons button {
-      flex: 1;
-    }
-    .tab-buttons button.active {
-      background-color: #5661d1;
-    }
-    .container {
-      max-width: 400px;
-      margin: 80px auto;
+
+    #menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 20px;
       background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-weight: bold;
-    }
-    .logout-section {
-      text-align: center;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <!-- 햄버거 메뉴 -->
-  <div id="hamburger" style="position: absolute; top: 20px; right: 20px; font-size: 26px; cursor: pointer; z-index: 1000;">☰</div>
-  <div id="menu" style="
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 10px 15px;
-    white-space: nowrap;
-    min-width: 160px;
-    text-align: center;
-    z-index: 999;
-  ">
-    <a href="auth.html" style="
-      display: inline-block;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 10px 15px;
       white-space: nowrap;
+      min-width: 160px;
+      text-align: center;
+    }
+
+    #menu a {
+      display: inline-block;
       padding: 8px 16px;
       text-decoration: none;
       color: #333;
       font-size: 14px;
       font-weight: bold;
-    ">🔐 로그인 / 회원가입</a>
+      white-space: nowrap;
+    }
+
+    .container {
+      max-width: 400px;
+      background: white;
+      margin: 120px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .tab-buttons {
+      display: flex;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px #ddd;
+    }
+
+    .tab-buttons button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #f0f0f0;
+    }
+
+    .tab-buttons button.active {
+      background-color: #5d6dff;
+      color: white;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button.action {
+      width: 100%;
+      padding: 12px;
+      background: #5d6dff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 햄버거 메뉴 -->
+  <div id="hamburger">&#9776;</div>
+  <div id="menu">
+    <a href="auth.html">🔑 로그인 / 회원가입</a>
   </div>
 
   <div class="container">
-    <h2>로그인 또는 회원가입</h2>
     <div class="tab-buttons">
-      <button class="active" onclick="showTab('login')">🔐 로그인</button>
-      <button onclick="showTab('signup')">📨 회원가입</button>
+      <button id="login-tab" class="active">🔑 로그인</button>
+      <button id="signup-tab">📝 회원가입</button>
     </div>
 
-    <!-- 로그인 폼 -->
-    <div id="login-form" class="form-group">
-      <input type="email" id="login-email" placeholder="이메일">
-      <input type="password" id="login-password" placeholder="비밀번호">
-      <button onclick="login()">로그인</button>
+    <div id="login-form">
+      <input type="email" id="login-email" placeholder="이메일"><br>
+      <input type="password" id="login-password" placeholder="비밀번호"><br>
+      <button class="action" onclick="login()">로그인</button>
+      <div class="message" id="login-message"></div>
     </div>
 
-    <!-- 회원가입 폼 -->
-    <div id="signup-form" class="form-group" style="display: none;">
-      <input type="email" id="signup-email" placeholder="이메일">
-      <input type="password" id="signup-password" placeholder="비밀번호 (6자 이상)">
-      <button onclick="signup()">회원가입</button>
+    <div id="signup-form" style="display: none;">
+      <input type="email" id="signup-email" placeholder="이메일"><br>
+      <input type="password" id="signup-password" placeholder="비밀번호 (6자 이상)"><br>
+      <button class="action" onclick="signup()">회원가입</button>
+      <div class="message" id="signup-message"></div>
     </div>
-
-    <div class="logout-section" id="logout-section" style="display: none;">
-      <p><strong id="user-email"></strong> 님 환영합니다 👋</p>
-      <button onclick="logout()">로그아웃</button>
-    </div>
-
-    <div class="message" id="msg" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
   </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
+  <!-- Firebase SDKs & app initialization -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
       authDomain: "todaymeal-19430.firebaseapp.com",
@@ -138,16 +149,13 @@
       messagingSenderId: "709245069596",
       appId: "1:709245069596:web:1eb199ebc794d27e132d9"
     };
-
-    // Firebase 초기화
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // 로그인, 회원가입, 로그아웃 함수 정의
-    window.login = function () {
+    function login() {
       const email = document.getElementById("login-email").value;
       const password = document.getElementById("login-password").value;
-      const msg = document.getElementById("msg");
+      const msg = document.getElementById("login-message");
 
       auth.signInWithEmailAndPassword(email, password)
         .then(() => {
@@ -158,42 +166,55 @@
           msg.innerText = "❌ " + error.message;
           msg.style.color = "red";
         });
-    };
+    }
 
-    window.signup = function () {
+    function signup() {
       const email = document.getElementById("signup-email").value;
       const password = document.getElementById("signup-password").value;
-      const msg = document.getElementById("msg");
+      const msg = document.getElementById("signup-message");
 
       auth.createUserWithEmailAndPassword(email, password)
         .then(() => {
-          msg.innerText = "✅ 회원가입 성공!";
+          msg.innerText = "✅ 회원가입 성공! 로그인해 주세요.";
           msg.style.color = "green";
         })
         .catch((error) => {
           msg.innerText = "❌ " + error.message;
           msg.style.color = "red";
         });
+    }
+
+    // Tab switching events
+    document.getElementById("login-tab").onclick = () => {
+      document.getElementById("login-form").style.display = "block";
+      document.getElementById("signup-form").style.display = "none";
+      document.getElementById("login-tab").classList.add("active");
+      document.getElementById("signup-tab").classList.remove("active");
+      document.getElementById("signup-message").innerText = "";
     };
 
-    window.logout = function () {
-      auth.signOut();
+    document.getElementById("signup-tab").onclick = () => {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("signup-form").style.display = "block";
+      document.getElementById("signup-tab").classList.add("active");
+      document.getElementById("login-tab").classList.remove("active");
+      document.getElementById("login-message").innerText = "";
     };
 
-    // 로그인 상태 감지
-    auth.onAuthStateChanged((user) => {
-      const logoutSection = document.getElementById("logout-section");
-      const userEmail = document.getElementById("user-email");
-      if (user) {
-        logoutSection.style.display = "block";
-        userEmail.innerText = user.email;
-      } else {
-        logoutSection.style.display = "none";
-        userEmail.innerText = "";
+    // Hamburger menu toggle
+    document.getElementById("hamburger").onclick = () => {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    };
+
+    // Close menu if clicking outside
+    document.addEventListener("click", (e) => {
+      const menu = document.getElementById("menu");
+      const hamburger = document.getElementById("hamburger");
+      if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = "none";
       }
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
