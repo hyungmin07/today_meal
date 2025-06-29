@@ -175,3 +175,21 @@ button:hover {
 .mypage-btn:hover, .menu-btn:hover {
   background: #eaeaea;
 }
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  max-width: 340px;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  font-size: 17px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #5c6bc0;
+  box-shadow: 0 0 8px rgba(92, 107, 192, 0.3);
+}
