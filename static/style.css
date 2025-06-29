@@ -207,3 +207,138 @@ button:hover {
   color: #333;
   font-size: 14px;
 }
+
+<style>
+    body {
+      margin: 0;
+      font-family: 'Pretendard', sans-serif;
+      background-color: #eef4ff;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #5b6ea7;
+      padding: 10px 20px;
+    }
+
+    .logo-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-box img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .logo-box span {
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+    }
+
+    .menu-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-right a {
+      font-size: 13px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .menu-icon {
+      font-size: 22px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 80px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .container h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    #autocomplete-suggestions {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .autocomplete-suggestions div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .autocomplete-suggestions div:hover {
+      background-color: #f0f0f0;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: #5b6ea7;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #4a5e96;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #meal-section {
+      margin-top: 30px;
+    }
+
+    #meal-menu {
+      margin-top: 10px;
+      background-color: #f9f9f9;
+      padding: 12px;
+      border-radius: 8px;
+    }
+  </style>
