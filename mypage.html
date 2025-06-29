@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>마이페이지</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 30px; }
+    .section { margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+  <h2>🙋‍♂️ 마이페이지</h2>
+
+  <div class="section">
+    <p><strong>📧 로그인된 이메일:</strong> <span id="user-email">로딩 중...</span></p>
+  </div>
+
+  <div class="section">
+    <p><strong>📛 닉네임:</strong> <span id="nickname-display">설정 안됨</span></p>
+    <input type="text" id="nickname-input" placeholder="닉네임 입력">
+    <button onclick="setNickname()">닉네임 저장</button>
+  </div>
+
+  <div class="section">
+    <p><strong>🍱 오늘 급식 평가:</strong></p>
+    <select id="rating">
+      <option value="5">★★★★★</option>
+      <option value="4">★★★★☆</option>
+      <option value="3">★★★☆☆</option>
+      <option value="2">★★☆☆☆</option>
+      <option value="1">★☆☆☆☆</option>
+    </select>
+    <button onclick="submitRating()">평가 제출</button>
+    <p id="rating-result" style="margin-top:10px;"></p>
+  </div>
+
+  <div class="section">
+    <p><strong>⏰ 알림 설정:</strong></p>
+    <p>요일: 월~금 / 시간: 오전 8시</p>
+  </div>
+
+  <div class="section">
+    <button onclick="logout()">🚪 로그아웃</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjo8SBs",
+      authDomain: "todaymeal-1e714.firebaseapp.com",
+      projectId: "todaymeal-1e714",
+      storageBucket: "todaymeal-1e714.appspot.com",
+      messagingSenderId: "815968093910",
+      appId: "1:815968093910:web:015a59857e22478230ab77",
+      measurementId: "G-XYRR36LBNS"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // ✅ 로그인 상태 확인
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById("user-email").innerText = user.email;
+      } else {
+        alert("로그인이 필요합니다.");
+        window.location.href = "auth.html";
+      }
+    });
+
+    // ✅ 로그아웃
+    function logout() {
+      auth.signOut().then(() => {
+        alert("로그아웃 되었습니다.");
+        window.location.href = "auth.html";
+      });
+    }
+
+    // ✅ 닉네임 저장 (로컬에만 저장됨)
+    function setNickname() {
+      const nickname = document.getElementById("nickname-input").value;
+      if (nickname.trim()) {
+        localStorage.setItem("nickname", nickname);
+        document.getElementById("nickname-display").innerText = nickname;
+        alert("닉네임이 저장되었습니다.");
+      }
+    }
+
+    // ✅ 페이지 로드시 닉네임 표시
+    window.onload = () => {
+      const savedName = localStorage.getItem("nickname");
+      if (savedName) {
+        document.getElementById("nickname-display").innerText = savedName;
+      }
+    };
+
+    // ✅ 급식 평가 제출
+    function submitRating() {
+      const rating = document.getElementById("rating").value;
+      document.getElementById("rating-result").innerText = `오늘의 급식 별점: ${"★".repeat(rating)}${"☆".repeat(5 - rating)}`;
+    }
+  </script>
+</body>
+</html>
