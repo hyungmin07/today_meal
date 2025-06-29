@@ -7,44 +7,29 @@
   <link rel="stylesheet" href="static/style.css" />
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
 <!-- 🔹 상단 네비게이션 바 -->
 <div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-  <!-- 로고 및 홈 링크 -->
   <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
     <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
-    <span style="color: white; font-size: 20px; font-weight: bold;font-style: oblique;">배고프당</span>
+    <span style="color: white; font-size: 20px; font-weight: bold; font-style: oblique;">배고프당</span>
   </a>
-
-  <!-- 메뉴와 마이페이지 버튼 -->
- <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
-  <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
-  <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
-</div>
+  <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
+    <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
+    <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
+  </div>
 </div>
 
-
- <!-- 🔹 드롭다운 메뉴 -->
-<div id="menu" style="
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background: white;
-  border-radius: 10px;
-  padding: 12px 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 180px;
-  z-index: 998;
-  white-space: nowrap;
-">
+<!-- 🔹 드롭다운 메뉴 -->
+<div id="menu" style="display: none; position: absolute; top: 60px; right: 10px; background: white; border-radius: 10px; padding: 12px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 180px; z-index: 998;">
   <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
 </div>
 
 <!-- 🔹 마이페이지 본문 -->
-<div class="container">
+<div class="container" style="margin-top: 120px;">
   <h1>🙋‍♂️ 마이페이지</h1>
 
   <div class="section">
@@ -52,26 +37,29 @@
   </div>
 
   <div class="section">
-    <p><strong>📛 닉네임:</strong> <span id="nickname-display">설정 안됨</span></p>
+    <p><strong>닉네임:</strong> <span id="nickname-display">설정 안됨</span></p>
     <input type="text" id="nickname-input" placeholder="닉네임 입력" />
     <button onclick="setNickname()">닉네임 저장</button>
   </div>
 
-  <div class="section">
-    <p><strong>🍱 오늘 급식 평가:</strong></p>
-    <select id="rating">
-      <option value="5">★★★★★</option>
-      <option value="4">★★★★☆</option>
-      <option value="3">★★★☆☆</option>
-      <option value="2">★★☆☆☆</option>
-      <option value="1">★☆☆☆☆</option>
-    </select>
-    <button onclick="submitRating()">평가 제출</button>
-    <p id="rating-result" style="margin-top:10px;"></p>
+  <!-- 📅 급식 평가 UI -->
+  <div class="meal-rating-section">
+    <h3>📅 날짜별 급식 평가</h3>
+    <input type="date" id="date-picker">
+    <div id="meal-info">🍱 급식 정보: 불러오는 중...</div>
+    <div id="rating-stars">
+      <span class="star" data-score="1">⭐</span>
+      <span class="star" data-score="2">⭐</span>
+      <span class="star" data-score="3">⭐</span>
+      <span class="star" data-score="4">⭐</span>
+      <span class="star" data-score="5">⭐</span>
+    </div>
+    <button onclick="saveRating()">📥 평가 저장</button>
+    <div id="rating-result"></div>
   </div>
 
   <div class="section">
-    <p><strong>⏰ 알림 설정:</strong><br>요일: 월~금 / 시간: 오전 8시</p>
+    <p><strong>⏰알림 설정:</strong><br>요일: 월~금 / 시간: 오전 8시</p>
   </div>
 
   <div class="section">
@@ -79,7 +67,7 @@
   </div>
 </div>
 
-<!-- 🔹 기능 스크립트 -->
+<!-- 🔹 스크립트 -->
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjo8SBs",
@@ -93,8 +81,8 @@
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
+  const db = firebase.firestore(); // ✅ Firestore 연결
 
-  // 로그인 감지
   auth.onAuthStateChanged((user) => {
     if (user) {
       document.getElementById("user-email").innerText = user.email;
@@ -104,7 +92,6 @@
     }
   });
 
-  // 로그아웃
   function logout() {
     auth.signOut().then(() => {
       alert("로그아웃 되었습니다.");
@@ -112,7 +99,6 @@
     });
   }
 
-  // 닉네임 설정
   function setNickname() {
     const nickname = document.getElementById("nickname-input").value;
     if (nickname.trim()) {
@@ -122,14 +108,6 @@
     }
   }
 
-  // 별점 평가
-  function submitRating() {
-    const rating = document.getElementById("rating").value;
-    document.getElementById("rating-result").innerText =
-      `오늘의 급식 별점: ${"★".repeat(rating)}${"☆".repeat(5 - rating)}`;
-  }
-
-  // 닉네임 불러오기
   window.onload = () => {
     const savedName = localStorage.getItem("nickname");
     if (savedName) {
@@ -137,11 +115,11 @@
     }
   };
 
-  // 햄버거 메뉴 토글
   document.getElementById("hamburger").onclick = () => {
     const menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
   };
+
   document.addEventListener("click", (e) => {
     const menu = document.getElementById("menu");
     const hamburger = document.getElementById("hamburger");
@@ -149,6 +127,64 @@
       menu.style.display = "none";
     }
   });
+
+  const datePicker = document.getElementById("date-picker");
+  const mealInfo = document.getElementById("meal-info");
+  const stars = document.querySelectorAll(".star");
+  const ratingResult = document.getElementById("rating-result");
+
+  let selectedRating = 0;
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      selectedRating = parseInt(star.dataset.score);
+      updateStars(selectedRating);
+    });
+  });
+
+  function updateStars(score) {
+    stars.forEach(star => {
+      star.style.color = star.dataset.score <= score ? "#f5b301" : "#aaa";
+    });
+  }
+
+  datePicker.addEventListener("change", async () => {
+    const date = datePicker.value;
+    const uid = auth.currentUser?.uid;
+    if (!uid) return alert("로그인이 필요합니다.");
+
+    await fetchMealInfo(date);
+    const doc = await db.collection("users").doc(uid).collection("ratings").doc(date).get();
+    if (doc.exists) {
+      selectedRating = doc.data().rating;
+      updateStars(selectedRating);
+      ratingResult.innerText = `⭐ 이전 평가: ${selectedRating}점`;
+    } else {
+      selectedRating = 0;
+      updateStars(0);
+      ratingResult.innerText = "아직 평가가 없습니다.";
+    }
+  });
+
+  async function fetchMealInfo(date) {
+    mealInfo.innerText = `🍱 선택한 날짜: ${date}`;
+  }
+
+  async function saveRating() {
+    const date = datePicker.value;
+    const uid = auth.currentUser?.uid;
+    if (!uid || !date || selectedRating === 0) {
+      alert("날짜와 별점을 모두 선택해주세요.");
+      return;
+    }
+
+    await db.collection("users").doc(uid).collection("ratings").doc(date).set({
+      rating: selectedRating,
+      timestamp: new Date()
+    });
+
+    ratingResult.innerText = `✅ ${date} - ${selectedRating}점으로 저장됨`;
+  }
 </script>
 </body>
 </html>

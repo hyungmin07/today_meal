@@ -197,3 +197,17 @@ input[type="password"]:focus {
 #login-tab{
   margin-bottom: 10px;
 }
+.meal-rating-section {
+  margin-top: 40px;
+  text-align: center;
+}
+
+#rating-stars .star {
+  font-size: 28px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+#rating-stars .star:hover {
+  color: #f5b301;
+}
