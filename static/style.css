@@ -186,10 +186,14 @@ input[type="password"] {
   font-size: 17px;
   outline: none;
   box-sizing: border-box;
+
 }
 
 input[type="email"]:focus,
 input[type="password"]:focus {
   border-color: #5c6bc0;
   box-shadow: 0 0 8px rgba(92, 107, 192, 0.3);
+}
+#login-tab{
+  margin-bottom: 10px;
 }
