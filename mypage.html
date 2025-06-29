@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="static/style.css" />
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -42,22 +41,6 @@
     <button onclick="setNickname()">닉네임 저장</button>
   </div>
 
-  <!-- 📅 급식 평가 UI -->
-  <div class="meal-rating-section">
-    <h3>📅 날짜별 급식 평가</h3>
-    <input type="date" id="date-picker">
-    <div id="meal-info">🍱 급식 정보: 불러오는 중...</div>
-    <div id="rating-stars">
-      <span class="star" data-score="1">⭐</span>
-      <span class="star" data-score="2">⭐</span>
-      <span class="star" data-score="3">⭐</span>
-      <span class="star" data-score="4">⭐</span>
-      <span class="star" data-score="5">⭐</span>
-    </div>
-    <button onclick="saveRating()">📥 평가 저장</button>
-    <div id="rating-result"></div>
-  </div>
-
   <div class="section">
     <p><strong>⏰알림 설정:</strong><br>요일: 월~금 / 시간: 오전 8시</p>
   </div>
@@ -81,8 +64,8 @@
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
-  const db = firebase.firestore(); // ✅ Firestore 연결
 
+  // 로그인 감지
   auth.onAuthStateChanged((user) => {
     if (user) {
       document.getElementById("user-email").innerText = user.email;
@@ -92,6 +75,7 @@
     }
   });
 
+  // 로그아웃
   function logout() {
     auth.signOut().then(() => {
       alert("로그아웃 되었습니다.");
@@ -99,6 +83,7 @@
     });
   }
 
+  // 닉네임 설정
   function setNickname() {
     const nickname = document.getElementById("nickname-input").value;
     if (nickname.trim()) {
@@ -108,6 +93,7 @@
     }
   }
 
+  // 닉네임 불러오기
   window.onload = () => {
     const savedName = localStorage.getItem("nickname");
     if (savedName) {
@@ -115,6 +101,7 @@
     }
   };
 
+  // 햄버거 메뉴
   document.getElementById("hamburger").onclick = () => {
     const menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
@@ -127,64 +114,7 @@
       menu.style.display = "none";
     }
   });
-
-  const datePicker = document.getElementById("date-picker");
-  const mealInfo = document.getElementById("meal-info");
-  const stars = document.querySelectorAll(".star");
-  const ratingResult = document.getElementById("rating-result");
-
-  let selectedRating = 0;
-
-  stars.forEach(star => {
-    star.addEventListener("click", () => {
-      selectedRating = parseInt(star.dataset.score);
-      updateStars(selectedRating);
-    });
-  });
-
-  function updateStars(score) {
-    stars.forEach(star => {
-      star.style.color = star.dataset.score <= score ? "#f5b301" : "#aaa";
-    });
-  }
-
-  datePicker.addEventListener("change", async () => {
-    const date = datePicker.value;
-    const uid = auth.currentUser?.uid;
-    if (!uid) return alert("로그인이 필요합니다.");
-
-    await fetchMealInfo(date);
-    const doc = await db.collection("users").doc(uid).collection("ratings").doc(date).get();
-    if (doc.exists) {
-      selectedRating = doc.data().rating;
-      updateStars(selectedRating);
-      ratingResult.innerText = `⭐ 이전 평가: ${selectedRating}점`;
-    } else {
-      selectedRating = 0;
-      updateStars(0);
-      ratingResult.innerText = "아직 평가가 없습니다.";
-    }
-  });
-
-  async function fetchMealInfo(date) {
-    mealInfo.innerText = `🍱 선택한 날짜: ${date}`;
-  }
-
-  async function saveRating() {
-    const date = datePicker.value;
-    const uid = auth.currentUser?.uid;
-    if (!uid || !date || selectedRating === 0) {
-      alert("날짜와 별점을 모두 선택해주세요.");
-      return;
-    }
-
-    await db.collection("users").doc(uid).collection("ratings").doc(date).set({
-      rating: selectedRating,
-      timestamp: new Date()
-    });
-
-    ratingResult.innerText = `✅ ${date} - ${selectedRating}점으로 저장됨`;
-  }
 </script>
+
 </body>
 </html>
