@@ -1,344 +1,163 @@
-/* 🔹 폰트 */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
-
+/* Body resets and base font */
 body {
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    background-color: #f0f8ff;
-    margin: 0;
-    padding: 20px 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    min-height: 100vh;
-    flex-direction: column;
+  margin: 0;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #eef4ff;
 }
 
-.container {
-    width: 92%;
-    max-width: 420px;
-    background: white;
-    padding: 24px 20px;
-    border-radius: 14px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    border-top: 6px solid #5c6bc0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
+/* Fixed top navbar container */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* Logo left, menu items right :contentReference[oaicite:4]{index=4} */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #5b6ea7;
+  padding: 10px 20px;
+  z-index: 1000;  /* Ensure navbar stays on top of other content */
 }
 
-h1, h2 {
-    color: #333;
-    font-weight: 600;
-    font-size: 22px;
-    text-align: center;
+/* Logo box (clickable logo + text) */
+.logo-box {
+  display: flex;
+  align-items: center;
+  text-decoration: none;  /* Remove underline from clickable logo text */
+}
+.logo-box img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.logo-box span {
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
 }
 
-/* 🔹 검색창 & 입력창 */
-.search-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Right-side menu (My Page link and hamburger icon) */
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.menu-right a {
+  font-size: 13px;
+  color: white;
+  text-decoration: none;
 }
 
-input[type="text"], input[type="date"] {
-    width: 100%;
-    max-width: 340px;
-    padding: 14px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-    font-size: 17px;
-    text-align: center;
-    outline: none;
-    transition: 0.2s;
-    background-color: #fff;
+/* Hamburger menu icon (☰) */
+.menu-icon {
+  font-size: 22px;
+  cursor: pointer;
+  color: white;
 }
 
-input[type="text"]:focus,
-input[type="date"]:focus {
-    border-color: #5c6bc0;
-    box-shadow: 0 0 8px rgba(92, 107, 192, 0.3);
-}
-
-/* 🔹 버튼 */
-button {
-    background-color: #5c6bc0;
-    color: white;
-    font-weight: bold;
-    font-size: 17px;
-    padding: 14px 20px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.25s;
-    width: 100%;
-    max-width: 340px;
-    box-shadow: 0 4px 12px rgba(92, 107, 192, 0.2);
-}
-
-button:hover {
-    background-color: #3f51b5;
-    transform: scale(1.05);
-}
-
-/* 🔹 자동완성 */
-.autocomplete-suggestions {
-    position: absolute;
-    width: 90%;
-    max-width: 360px;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    display: none;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.autocomplete-item {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 15px;
-    color: #333;
-    text-align: center;
-}
-
-.autocomplete-item:hover {
-    background-color: #f1f1f1;
-}
-
-.autocomplete-active {
-    background-color: #5c6bc0;
-    color: white;
-    border-radius: 5px;
-}
-
-/* 🔹 검색 결과 */
-#search-results {
-    display: none;
-    width: 100%;
-    max-width: 340px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-    text-align: center;
-    margin-top: 10px;
-}
-
-/* 🔹 날짜 & 급식 메뉴 */
-#meal-section.hidden {
-    display: none;
-}
-
-#meal-date {
-    margin-top: 10px;
-}
-
-/* 🔹 급식 카드 스타일 */
-.meal-card {
-    background-color: #ffffff;
-    border: 2px solid #bbdefb;
-    border-radius: 16px;
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.1);
-    padding: 20px;
-    margin-top: 20px;
-    max-width: 380px;
-    color: #333;
-    font-size: 15.5px;
-    line-height: 1.7;
-    text-align: left;
-}
-
-.meal-card h3 {
-    color: #2196f3;
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    text-align: center;
-}
-
-.meal-card p {
-    margin: 6px 0;
-    white-space: pre-line;
-    color: #555;
-}
-
-/* 🔹 급식 정보 없음 표시 */
-#meal-menu p {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-weight: 500;
-    margin-top: 10px;
-}
-
-/* 🔹 모바일 반응형 */
-@media (max-width: 420px) {
-    .container {
-        padding: 18px 16px;
-    }
-
-    input[type="text"], input[type="date"], button {
-        font-size: 16px;
-    }
-
-    .meal-card {
-        padding: 16px;
-        font-size: 15px;
-    }
+/* Dropdown menu panel (hidden by default) */
+#menu {
+  display: none;               /* Hidden until toggled */
+  position: fixed;             /* Fixed so it stays with navbar on scroll */
+  top: 60px;                   /* Position just below the navbar (approximately navbar height) */
+  right: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  white-space: nowrap;
+  min-width: 160px;
+  text-align: center;
+  z-index: 999;                /* Above other content (just below navbar z-index) */
 }
 #menu a {
-  display: inline-block;         /* 가로 정렬 유지 */
-  white-space: nowrap;           /* 줄바꿈 금지 */
-  padding: 10px 20px;
+  display: inline-block;
+  padding: 8px 16px;
   text-decoration: none;
   color: #333;
   font-size: 14px;
+  font-weight: bold;
 }
 
-<style>
-    body {
-      margin: 0;
-      font-family: 'Pretendard', sans-serif;
-      background-color: #eef4ff;
-    }
+/* Container for main content (centered card) */
+.container {
+  max-width: 400px;
+  margin: 80px auto;           /* Add top margin so content is not hidden under the fixed navbar:contentReference[oaicite:5]{index=5} */
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.container h1 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
 
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #5b6ea7;
-      padding: 10px 20px;
-    }
+/* Search box and autocomplete suggestions */
+.search-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+#search-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+/* Autocomplete suggestions dropdown */
+#autocomplete-suggestions {
+  position: absolute;
+  top: 44px;       /* directly below the input field */
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.autocomplete-suggestions div {
+  padding: 10px;
+  cursor: pointer;
+}
+.autocomplete-suggestions div:hover {
+  background-color: #f0f0f0;
+}
 
-    .logo-box {
-      display: flex;
-      align-items: center;
-    }
+/* Search and meal buttons */
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: #5b6ea7;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+button:hover {
+  background-color: #4a5e96;
+}
 
-    .logo-box img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
+/* Hidden class to toggle visibility (used for meal section) */
+.hidden {
+  display: none;
+}
 
-    .logo-box span {
-      font-weight: bold;
-      font-size: 20px;
-      color: white;
-    }
-
-    .menu-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .menu-right a {
-      font-size: 13px;
-      color: white;
-      text-decoration: none;
-    }
-
-    .menu-icon {
-      font-size: 22px;
-      cursor: pointer;
-      color: white;
-    }
-
-    .container {
-      max-width: 400px;
-      margin: 80px auto;
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .container h1 {
-      font-size: 22px;
-      margin-bottom: 20px;
-    }
-
-    .search-container {
-      position: relative;
-      margin-bottom: 16px;
-    }
-
-    #search-input {
-      width: 100%;
-      padding: 12px;
-      font-size: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-
-    #autocomplete-suggestions {
-      position: absolute;
-      top: 44px;
-      left: 0;
-      right: 0;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-top: none;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 1000;
-    }
-
-    .autocomplete-suggestions div {
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .autocomplete-suggestions div:hover {
-      background-color: #f0f0f0;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
-      border: none;
-      border-radius: 8px;
-      background-color: #5b6ea7;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background-color: #4a5e96;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    #meal-section {
-      margin-top: 30px;
-    }
-
-    #meal-menu {
-      margin-top: 10px;
-      background-color: #f9f9f9;
-      padding: 12px;
-      border-radius: 8px;
-    }
-  </style>
+/* Meal section styling */
+#meal-section {
+  margin-top: 30px;
+}
+#meal-menu {
+  margin-top: 10px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+}

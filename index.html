@@ -4,192 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>배고프당 - 학교 급식 알림 서비스</title>
-  <link rel="icon" type="image/x-icon" href="/today_meal/static/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="/today_meal/static/favicon.ico" />
   <link rel="stylesheet" href="static/style.css" />
-  <meta name="description" content="배고프당은 전국 초중고 학교의 급식 정보를 빠르게 확인할 수 있는 웹사이트입니다.">
-  <meta name="keywords" content="급식, 배고프당, 학교 급식, 급식 알림, 급식 정보, 학교">
-  <meta name="author" content="hyungmin07">
-  <meta property="og:title" content="배고프당">
-  <meta property="og:description" content="전국 학교 급식 정보를 쉽게 확인해보세요.">
-  <meta property="og:url" content="https://todaymeal.kr">
-  <meta property="og:type" content="website">
-  <meta name="google-adsense-account" content="ca-pub-9502194389239851">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Pretendard', sans-serif;
-      background-color: #eef4ff;
-    }
-
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #5b6ea7;
-      padding: 10px 20px;
-    }
-
-    .logo-box {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo-box img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    .logo-box span {
-      font-weight: bold;
-      font-size: 20px;
-      color: white;
-    }
-
-    .menu-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .menu-right a {
-      font-size: 13px;
-      color: white;
-      text-decoration: none;
-    }
-
-    .menu-icon {
-      font-size: 22px;
-      cursor: pointer;
-      color: white;
-    }
-
-    .container {
-      max-width: 400px;
-      margin: 80px auto;
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .container h1 {
-      font-size: 22px;
-      margin-bottom: 20px;
-    }
-
-    .search-container {
-      position: relative;
-      margin-bottom: 16px;
-    }
-
-    #search-input {
-      width: 100%;
-      padding: 12px;
-      font-size: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-
-    #autocomplete-suggestions {
-      position: absolute;
-      top: 44px;
-      left: 0;
-      right: 0;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-top: none;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 1000;
-    }
-
-    .autocomplete-suggestions div {
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .autocomplete-suggestions div:hover {
-      background-color: #f0f0f0;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
-      border: none;
-      border-radius: 8px;
-      background-color: #5b6ea7;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background-color: #4a5e96;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    #meal-section {
-      margin-top: 30px;
-    }
-
-    #meal-menu {
-      margin-top: 10px;
-      background-color: #f9f9f9;
-      padding: 12px;
-      border-radius: 8px;
-    }
-  </style>
+  <meta name="description" content="배고프당은 전국 초중고 학교의 급식 정보를 빠르게 확인할 수 있는 웹사이트입니다." />
+  <meta name="keywords" content="급식, 배고프당, 학교 급식, 급식 알림, 급식 정보, 학교" />
+  <meta name="author" content="hyungmin07" />
+  <meta property="og:title" content="배고프당" />
+  <meta property="og:description" content="전국 학교 급식 정보를 쉽게 확인해보세요." />
+  <meta property="og:url" content="https://todaymeal.kr" />
+  <meta property="og:type" content="website" />
+  <meta name="google-adsense-account" content="ca-pub-9502194389239851" />
 </head>
 <body>
-
-  <!-- 상단 바 -->
+  <!-- 상단 바 (Navbar) -->
   <div class="navbar">
-    <div class="logo-box">
+    <a href="/" class="logo-box">
       <img src="static/logo.png" alt="로고" />
       <span>배고프당</span>
-    </div>
+    </a>
     <div class="menu-right">
-      <a href="mypage.html">마이</a>
+      <a href="mypage.html">마이페이지</a>
       <div class="menu-icon" onclick="toggleMenu()">☰</div>
     </div>
   </div>
 
-  <!-- 드롭다운 메뉴 -->
-  <div id="menu" style="
-    display: none;
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    padding: 10px 15px;
-    white-space: nowrap;
-    min-width: 160px;
-    text-align: center;
-    z-index: 999;
-  ">
-    <a href="auth.html" style="
-      display: inline-block;
-      padding: 8px 16px;
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-      font-weight: bold;
-    ">🔑 로그인/회원가입</a>
+  <!-- 드롭다운 메뉴 (Dropdown Menu) -->
+  <div id="menu">
+    <a href="auth.html">🔑 로그인/회원가입</a>
   </div>
 
-  <!-- 검색 컨테이너 -->
+  <!-- 검색 컨테이너 (Search Container) -->
   <div class="container">
     <h1>학교 검색</h1>
     <div class="search-container">
@@ -207,14 +51,15 @@
     </div>
   </div>
 
-  <!-- 햄버거 메뉴 JS -->
+  <!-- 햄버거 메뉴 JS (Hamburger Menu Toggle Script) -->
   <script>
     function toggleMenu() {
       const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+      // Toggle the dropdown menu visibility
+      menu.style.display = (menu.style.display === "block" ? "none" : "block");
     }
-
-    document.addEventListener("click", function (e) {
+    // Hide the dropdown if clicked outside
+    document.addEventListener("click", function(e) {
       const hamburger = document.querySelector(".menu-icon");
       const menu = document.getElementById("menu");
       if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
@@ -223,7 +68,7 @@
     });
   </script>
 
-  <!-- 기존 검색 로직 -->
+  <!-- 기존 검색 로직 (Existing Search Logic) -->
   <script src="static/js.js"></script>
 </body>
 </html>
