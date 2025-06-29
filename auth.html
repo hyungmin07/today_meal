@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<!-- 🔹 상단 네비게이션 바 -->
+<!-- 🔹 네비게이션 바 -->
 <div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
   <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
     <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
@@ -22,12 +22,12 @@
   </div>
 </div>
 
-<!-- 🔹 드롭다운 메뉴 -->
+<!-- 드롭다운 메뉴 -->
 <div id="menu" style="display: none; position: absolute; top: 60px; right: 10px; background: white; border-radius: 10px; padding: 12px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 180px; z-index: 998; white-space: nowrap;">
   <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
 </div>
 
-<!-- 🔹 로그인/회원가입 폼 -->
+<!-- 로그인/회원가입 폼 -->
 <div class="container" style="margin-top: 120px;">
   <div class="tab-buttons">
     <button id="login-tab" class="active">🔑 로그인</button>
@@ -49,18 +49,17 @@
   </div>
 </div>
 
-<!-- 🔥 Firebase 설정 (새 프로젝트) -->
+<!-- Firebase 초기화 -->
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjoS8Bs",
-  authDomain: "todaymeal-1e714.firebaseapp.com",
-  projectId: "todaymeal-1e714",
-  storageBucket: "todaymeal-1e714.appspot.com",
-  messagingSenderId: "815960893910",
-  appId: "1:815960893910:web:123c2964731327c130ab77",
-  measurementId: "G-WTE6MV5023"
-};
-
+  const firebaseConfig = {
+    apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjoS8Bs",
+    authDomain: "todaymeal-1e714.firebaseapp.com",
+    projectId: "todaymeal-1e714",
+    storageBucket: "todaymeal-1e714.appspot.com",
+    messagingSenderId: "815960893910",
+    appId: "1:815960893910:web:123c2964731327c130ab77",
+    measurementId: "G-WTE6MV5023"
+  };
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
