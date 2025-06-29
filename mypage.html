@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>마이페이지 - 오늘의 급식</title>
+  <link rel="stylesheet" href="static/style.css" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>마이페이지</h2>
+    <p id="user-email">🔐 사용자 이메일 불러오는 중...</p>
+    <button onclick="logout()">로그아웃</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjpKGSZlv7HrerkHfFtyYhNBNrNfveU-Fo4",
+      authDomain: "todaymeal-19430.firebaseapp.com",
+      projectId: "todaymeal-19430",
+      storageBucket: "todaymeal-19430.appspot.com",
+      messagingSenderId: "709245069596",
+      appId: "1:709245069596:web:1eb199ebc794d27e132d9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById("user-email").innerText = `👤 로그인된 이메일: ${user.email}`;
+      } else {
+        alert("로그인이 필요합니다.");
+        window.location.href = "auth.html";
+      }
+    });
+
+    function logout() {
+      auth.signOut().then(() => {
+        alert("로그아웃되었습니다.");
+        window.location.href = "auth.html";
+      });
+    }
+  </script>
+</body>
+</html>
