@@ -161,3 +161,17 @@ button:hover {
   padding: 12px;
   border-radius: 8px;
 }
+.mypage-btn, .menu-btn {
+  font-size: 13px;
+  padding: 6px 14px;
+  background: white;
+  color: #5c6bc0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.mypage-btn:hover, .menu-btn:hover {
+  background: #eaeaea;
+}

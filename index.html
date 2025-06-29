@@ -16,19 +16,20 @@
   <meta name="google-adsense-account" content="ca-pub-9502194389239851" />
 </head>
 <body>
-  <!-- 상단 바 (Navbar) -->
-  <div class="navbar">
-    <a href="/" class="logo-box">
-      <img src="static/logo.png" alt="로고" />
-      <span>배고프당</span>
-    </a>
-    <div class="menu-right">
-      <a href="mypage.html">마이페이지</a>
-      <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    </div>
-  </div>
+<!-- 🔹 상단 네비게이션 바 -->
+<div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+  <!-- 로고 -->
+  <a href="/" style="text-decoration: none; color: white; font-size: 20px; font-weight: bold;">배고프당</a>
 
-  <!-- 드롭다운 메뉴 (Dropdown Menu) -->
+  <!-- 오른쪽 버튼들 -->
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <a href="mypage.html" class="mypage-btn">마이페이지</a>
+    <a href="auth.html" class="menu-btn">☰</a>
+  </div>
+</div>
+<div style="height: 60px;"></div>
+  
+<!-- 드롭다운 메뉴 (Dropdown Menu) -->
   <div id="menu">
     <a href="auth.html">🔑 로그인/회원가입</a>
   </div>
