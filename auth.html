@@ -141,82 +141,80 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script>
-  // Firebase 설정
-  const firebaseConfig = {
-    apiKey: "AIzaSyBjpkGSZIv7HrerKHftYhNbNRrfveU-Fo4",
-    authDomain: "todaymeal-19430.firebaseapp.com",
-    projectId: "todaymeal-19430",
-    storageBucket: "todaymeal-19430.appspot.com",
-    messagingSenderId: "709245069596",
-    appId: "1:709245069596:web:1eb199ebc794d27e132d9"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjpkGSZIv7HrerKHftYhNbNRrfveU-Fo4",
+      authDomain: "todaymeal-19430.firebaseapp.com",
+      projectId: "todaymeal-19430",
+      storageBucket: "todaymeal-19430.appspot.com",
+      messagingSenderId: "709245069596",
+      appId: "1:709245069596:web:1eb199ebc794d27e132d9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-  function showTab(tab) {
-    document.getElementById("login-form").style.display = tab === "login" ? "flex" : "none";
-    document.getElementById("signup-form").style.display = tab === "signup" ? "flex" : "none";
+    function login() {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      const msg = document.getElementById("login-message");
 
-    const buttons = document.querySelectorAll(".tab-buttons button");
-    buttons.forEach(btn => btn.classList.remove("active"));
-    if (tab === "login") buttons[0].classList.add("active");
-    else buttons[1].classList.add("active");
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          msg.innerText = "✅ 로그인 성공!";
+          msg.style.color = "green";
+        })
+        .catch((error) => {
+          msg.innerText = "❌ " + error.message;
+          msg.style.color = "red";
+        });
+    }
 
-    document.getElementById("msg").innerText = "";
-  }
+    function signup() {
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      const msg = document.getElementById("signup-message");
 
-  function login() {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-    const msg = document.getElementById("msg");
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          msg.innerText = "✅ 회원가입 성공! 로그인해 주세요.";
+          msg.style.color = "green";
+        })
+        .catch((error) => {
+          msg.innerText = "❌ " + error.message;
+          msg.style.color = "red";
+        });
+    }
 
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        msg.innerText = "✅ 로그인 성공!";
-        msg.style.color = "green";
-        setTimeout(() => {
-          window.location.href = "mypage.html";
-        }, 1000);
-      })
-      .catch((error) => {
-        msg.innerText = "❌ " + error.message;
-        msg.style.color = "red";
-      });
-  }
+    // Tab switching events
+    document.getElementById("login-tab").onclick = () => {
+      document.getElementById("login-form").style.display = "block";
+      document.getElementById("signup-form").style.display = "none";
+      document.getElementById("login-tab").classList.add("active");
+      document.getElementById("signup-tab").classList.remove("active");
+      document.getElementById("signup-message").innerText = "";
+    };
 
-  function signup() {
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
-    const msg = document.getElementById("msg");
+    document.getElementById("signup-tab").onclick = () => {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("signup-form").style.display = "block";
+      document.getElementById("signup-tab").classList.add("active");
+      document.getElementById("login-tab").classList.remove("active");
+      document.getElementById("login-message").innerText = "";
+    };
 
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        msg.innerText = "✅ 회원가입 성공!";
-        msg.style.color = "green";
-        setTimeout(() => {
-          window.location.href = "mypage.html";
-        }, 1000);
-      })
-      .catch((error) => {
-        msg.innerText = "❌ " + error.message;
-        msg.style.color = "red";
-      });
-  }
+    // Hamburger menu toggle
+    document.getElementById("hamburger").onclick = () => {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    };
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const hamburger = document.getElementById("hamburger");
-    const menu = document.getElementById("menu");
-
-    hamburger.addEventListener("click", () => {
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    });
-
+    // Close menu if clicking outside
     document.addEventListener("click", (e) => {
+      const menu = document.getElementById("menu");
+      const hamburger = document.getElementById("hamburger");
       if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
         menu.style.display = "none";
       }
     });
-  });
-</script>
+  </script>
 </body>
 </html>
