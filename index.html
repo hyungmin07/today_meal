@@ -33,7 +33,7 @@
 </div>
 
 
- <!-- 🔹 드롭다운 메뉴 -->
+<!-- 🔹 드롭다운 메뉴 -->
 <div id="menu" style="
   display: none;
   position: absolute;
@@ -45,8 +45,11 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   min-width: 180px;
   z-index: 998;
-  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 ">
+  <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
   <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
 </div>
 
