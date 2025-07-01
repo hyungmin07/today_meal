@@ -28,7 +28,7 @@
   </style>
 </head>
 <body style="background-color: #f0f8ff;">
- <!-- 🔹 상단 네비게이션 바 -->
+<!-- 🔹 상단 네비게이션 바 -->
 <div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
   <!-- 로고 및 홈 링크 -->
   <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
@@ -41,6 +41,27 @@
   <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
   <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
 </div>
+</div>
+
+
+<!-- 🔹 드롭다운 메뉴 -->
+<div id="menu" style="
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background: white;
+  border-radius: 10px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 180px;
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+">
+  <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
+  <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
 </div>
 
  <!-- 🔹 드롭다운 메뉴 -->
