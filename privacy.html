@@ -13,18 +13,17 @@
   <!-- 로고 및 홈 링크 -->
   <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
     <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
-    <span style="color: white; font-size: 20px; font-weight: bold;font-style: oblique;">배고프당</span>
+    <span style="color: white; font-size: 20px; font-weight: bold; font-style: oblique;">배고프당</span>
   </a>
 
   <!-- 메뉴와 마이페이지 버튼 -->
- <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
-  <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
-  <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
-</div>
+  <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
+    <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
+    <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
+  </div>
 </div>
 
-
-<!-- 🔹 드롭다운 메뉴 -->
+<!-- 🔹 드롭다운 메뉴 (세로 정렬 고정) -->
 <div id="menu" style="
   display: none;
   position: absolute;
@@ -39,10 +38,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  white-space: nowrap;
 ">
   <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
   <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
 </div>
+
 
  <!-- 🔹 드롭다운 메뉴 -->
 <div id="menu" style="
@@ -94,6 +95,6 @@
 
   <p style="margin-top: 30px; font-size: 14px;">최종 수정일: 2025년 7월 1일</p>
 </div>
-  <script src="static/js.js"></script>
+ <script src="static/js.js"></script>
 </body>
 </html>
