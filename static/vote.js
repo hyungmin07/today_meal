@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // ✅ Firebase 설정 및 초기화
+  const firebaseConfig = {
+    apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjo8SBs",
+    authDomain: "todaymeal-1e714.firebaseapp.com",
+    projectId: "todaymeal-1e714",
+    storageBucket: "todaymeal-1e714.firebasestorage.app",
+    messagingSenderId: "815968093910",
+    appId: "1:815968093910:web:015a59857e22478230ab77"
+    
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const db = firebase.firestore();
+
   // ✅ 햄버거 메뉴 열기/닫기
   const hamburger = document.getElementById("hamburger");
   const menu = document.getElementById("menu");
@@ -26,8 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f";
   let selectedSchool = null;
 
-  const db = firebase.firestore();
-
   // ✅ 자동완성
   searchInput.addEventListener("input", function () {
     const query = searchInput.value.trim();
@@ -40,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(`https://open.neis.go.kr/hub/schoolInfo?KEY=${API_KEY}&Type=json&SCHUL_NM=${query}`)
       .then((res) => res.json())
       .then((data) => {
-        if (!data.schoolInfo) return;
+        if (!data.schoolInfo || !data.schoolInfo[1]) return;
         const rows = data.schoolInfo[1].row;
 
         rows.forEach((school) => {

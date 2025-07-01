@@ -15,57 +15,52 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
-      padding-top: 80px; /* 상단 고정 네비게이션 바 공간 확보 */
+      padding-top: 80px;
       background-color: #eef5ff;
       font-family: 'Noto Sans KR', sans-serif;
     }
   </style>
 </head>
 <body>
- <!-- 🔹 상단 네비게이션 바 -->
-<div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-  <!-- 로고 및 홈 링크 -->
-  <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-    <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
-    <span style="color: white; font-size: 20px; font-weight: bold;font-style: oblique;">배고프당</span>
-  </a>
 
-  <!-- 메뉴와 마이페이지 버튼 -->
- <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
-  <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
-  <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
-</div>
-</div>
+  <!-- 🔹 상단 네비게이션 바 -->
+  <div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+    <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+      <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
+      <span style="color: white; font-size: 20px; font-weight: bold;font-style: oblique;">배고프당</span>
+    </a>
+    <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
+      <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
+      <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
+    </div>
+  </div>
 
+  <!-- 🔹 드롭다운 메뉴 -->
+  <div id="menu" style="
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    background: white;
+    border-radius: 10px;
+    padding: 12px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 180px;
+    z-index: 998;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  ">
+    <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
+    <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
+  </div>
 
-<!-- 🔹 드롭다운 메뉴 -->
-<div id="menu" style="
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background: white;
-  border-radius: 10px;
-  padding: 12px 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 180px;
-  z-index: 998;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-">
-  <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
-  <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
-</div>
-
-  <!-- 🔹 메인 컨텐츠 -->
+  <!-- 🔹 메인 콘텐츠 -->
   <div class="container">
     <h1>🏆 인기 급식 투표하기</h1>
-
     <input type="text" id="search-input" placeholder="학교 이름을 입력하세요" />
-    
+    <div class="autocomplete-suggestions"></div>
 
     <div id="school-info" style="margin-top: 10px;"></div>
 
@@ -77,29 +72,38 @@
     </div>
   </div>
 
-  <!-- 메뉴 스크립트 & 기능 스크립트 -->
+  <!-- 🔹 오늘 날짜 자동 표시 -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const hamburger = document.getElementById("hamburger");
-      const menu = document.getElementById("menu");
-
-      hamburger.addEventListener("click", () => {
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
-      });
-
-      document.addEventListener("click", (e) => {
-        if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
-          menu.style.display = "none";
-        }
-      });
-
-      // 오늘 날짜 자동 표시
       const today = new Date().toISOString().split("T")[0];
       const todayDateSpan = document.getElementById("today-date");
       if (todayDateSpan) todayDateSpan.textContent = today;
     });
   </script>
 
-  <script src="static/vote.js"></script>
+  <!-- 🔹 Firebase 설정 및 로그인 체크 → vote.js 동적 로딩 -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AlzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjo8SBs",
+      authDomain: "todaymeal-1e714.firebaseapp.com",
+      projectId: "todaymeal-1e714",
+      storageBucket: "todaymeal-1e714.appspot.com",
+      messagingSenderId: "815968093910",
+      appId: "1:815968093910:web:015a59857e22478230ab77" // ← 웹앱 등록 후 appId 복붙
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        window.location.href = "auth.html";
+      } else {
+        const script = document.createElement("script");
+        script.src = "static/vote.js";
+        document.body.appendChild(script);
+      }
+    });
+  </script>
+ 
 </body>
 </html>
