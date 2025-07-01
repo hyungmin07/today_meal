@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="static/style.css" />
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <link rel="stylesheet" href="static/style.css" />
 <body>
 
 <!-- 🔹 상단 네비게이션 바 -->
@@ -120,19 +119,7 @@
     }
   };
 
-  // 햄버거 메뉴
-  document.getElementById("hamburger").onclick = () => {
-    const menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-  };
-
-  document.addEventListener("click", (e) => {
-    const menu = document.getElementById("menu");
-    const hamburger = document.getElementById("hamburger");
-    if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
-      menu.style.display = "none";
-    }
-  });
+ 
 </script>
   <script src="static/js.js"></script>
 </body>
