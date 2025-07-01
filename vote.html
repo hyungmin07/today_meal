@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>오늘의 인기 급식 투표</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <style>
+    .vote-container {
+      max-width: 420px;
+      margin: 80px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .meal-box {
+      border: 2px solid #ddd;
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .heart-btn {
+      font-size: 24px;
+      cursor: pointer;
+      color: #ccc;
+      transition: 0.2s;
+    }
+    .heart-btn.liked {
+      color: red;
+    }
+    .like-count {
+      margin-top: 6px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="vote-container">
+    <h2>❤️ 오늘의 인기 급식 투표하기</h2>
+
+    <input type="text" id="school-input" placeholder="학교 이름을 입력하세요" style="width:100%; padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc;"><br>
+    <button id="search-btn">급식 불러오기</button>
+
+    <div id="meal-box" class="meal-box" style="display:none;">
+      <h3 id="meal-title"></h3>
+      <p id="meal-menu"></p>
+      <div class="heart-btn" id="heart-btn">❤️</div>
+      <div class="like-count" id="like-count">0명 좋아요</div>
+    </div>
+  </div>
+
+  <script>
+    // ✅ Firebase 설정
+    const firebaseConfig = {
+      apiKey: "AIzaSyB...너의키...",
+      authDomain: "todaymeal-19430.firebaseapp.com",
+      projectId: "todaymeal-19430"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUserEmail = null;
+    let schoolCode = null;
+    let eduOfficeCode = null;
+    let today = new Date().toISOString().slice(0, 10);
+    let docId = null;
+
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        alert("로그인 후 이용해 주세요.");
+        window.location.href = "auth.html";
+      } else {
+        currentUserEmail = user.email;
+      }
+    });
+
+    document.getElementById("search-btn").onclick = async () => {
+      const query = document.getElementById("school-input").value.trim();
+      if (!query) return alert("학교 이름을 입력하세요.");
+
+      // ✅ 학교 검색 API 호출
+      const res = await fetch(`https://open.neis.go.kr/hub/schoolInfo?KEY=8e7a77dab2f34ff9b3f7d6ead4d6e39f&Type=json&SCHUL_NM=${query}`);
+      const data = await res.json();
+
+      if (!data.schoolInfo || data.schoolInfo.length < 2) {
+        alert("학교를 찾을 수 없습니다.");
+        return;
+      }
+
+      const school = data.schoolInfo[1].row[0];
+      schoolCode = school.SD_SCHUL_CODE;
+      eduOfficeCode = school.ATPT_OFCDC_SC_CODE;
+      docId = `${schoolCode}_${today.replace(/-/g, "")}`;
+
+      // ✅ 급식 정보 불러오기
+      const mealRes = await fetch(`https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=8e7a77dab2f34ff9b3f7d6ead4d6e39f&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${today.replace(/-/g, "")}`);
+      const mealData = await mealRes.json();
+
+      const mealBox = document.getElementById("meal-box");
+      const mealMenu = document.getElementById("meal-menu");
+      const mealTitle = document.getElementById("meal-title");
+
+      if (!mealData.mealServiceDietInfo || mealData.mealServiceDietInfo.length < 2) {
+        mealBox.style.display = "block";
+        mealMenu.innerHTML = "급식 정보가 없습니다.";
+        document.getElementById("heart-btn").style.display = "none";
+        return;
+      }
+
+      const menu = mealData.mealServiceDietInfo[1].row[0].DDISH_NM.replace(/<br\/>/g, "<br>");
+      mealBox.style.display = "block";
+      mealMenu.innerHTML = menu;
+      mealTitle.innerText = `${school.SCHUL_NM} - ${today}`;
+      document.getElementById("heart-btn").style.display = "inline";
+
+      loadLike();
+    };
+
+    async function loadLike() {
+      const doc = await db.collection("likes").doc(docId).get();
+      const data = doc.data();
+      const likedUsers = data?.likedUsers || {};
+
+      const btn = document.getElementById("heart-btn");
+      const count = Object.keys(likedUsers).length;
+      document.getElementById("like-count").innerText = `${count}명 좋아요`;
+
+      if (likedUsers[currentUserEmail]) {
+        btn.classList.add("liked");
+      } else {
+        btn.classList.remove("liked");
+      }
+
+      btn.onclick = () => toggleLike(likedUsers);
+    }
+
+    function toggleLike(likedUsers) {
+      const btn = document.getElementById("heart-btn");
+      const countEl = document.getElementById("like-count");
+
+      const docRef = db.collection("likes").doc(docId);
+      if (likedUsers[currentUserEmail]) {
+        delete likedUsers[currentUserEmail];
+        btn.classList.remove("liked");
+      } else {
+        likedUsers[currentUserEmail] = true;
+        btn.classList.add("liked");
+      }
+
+      docRef.set({ likedUsers }, { merge: true }).then(() => {
+        const count = Object.keys(likedUsers).length;
+        countEl.innerText = `${count}명 좋아요`;
+      });
+    }
+  </script>
+</body>
+</html>
