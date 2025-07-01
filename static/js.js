@@ -4,12 +4,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const menu = document.getElementById("menu");
 
   if (hamburger && menu) {
-    hamburger.addEventListener("click", () => {
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isVisible = menu.style.display === "flex";
+      menu.style.display = isVisible ? "none" : "flex";
     });
 
     document.addEventListener("click", (e) => {
-      if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
+      if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
         menu.style.display = "none";
       }
     });
@@ -45,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         closeAllSuggestions();
 
         if (!data.schoolInfo) return;
-        const rows = data.schoolInfo[1].row.slice(0, 5); // 최대 5개만 표시
+        const rows = data.schoolInfo[1].row.slice(0, 5);
 
         rows.forEach((school) => {
           const suggestion = document.createElement("div");
