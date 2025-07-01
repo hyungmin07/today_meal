@@ -132,18 +132,7 @@
     document.getElementById("login-message").innerText = "";
   };
 
-  document.getElementById("hamburger").onclick = () => {
-    const menu = document.getElementById("menu");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-  };
-
-  document.addEventListener("click", (e) => {
-    const menu = document.getElementById("menu");
-    const hamburger = document.getElementById("hamburger");
-    if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
-      menu.style.display = "none";
-    }
-  });
+ 
 </script>
  <script src="static/js.js"></script>
 </body>
