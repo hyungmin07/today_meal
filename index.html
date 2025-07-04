@@ -14,24 +14,20 @@
   <meta property="og:url" content="https://todaymeal.kr" />
   <meta property="og:type" content="website" />
   <meta name="google-adsense-account" content="ca-pub-9502194389239851" />
-   <!-- favicon -->  <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
+</head>
 <body>
 
 <!-- 🔹 상단 네비게이션 바 -->
 <div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-  <!-- 로고 및 홈 링크 -->
   <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-    <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
-    <span style="color: white; font-size: 20px; font-weight: bold;font-style: oblique;">배고프당</span>
+    <img src="static/logo.png" alt="배고프당 로고" style="height: 40px; ">
+    <span style="color: white; font-size: 20px; font-weight: bold;">배고프당</span>
   </a>
-
-  <!-- 메뉴와 마이페이지 버튼 -->
- <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
-  <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
-  <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
+  <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
+    <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
+    <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
+  </div>
 </div>
-</div>
-
 
 <!-- 🔹 드롭다운 메뉴 -->
 <div id="menu" style="
@@ -45,73 +41,85 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   min-width: 180px;
   z-index: 998;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  white-space: nowrap;
 ">
-  <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
   <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
 </div>
 
-<!--보조설명구간-->
-<div style="margin-top: 80px; margin-left:13px; line-height:1; ">
-  <h2>전국 초·중·고등학교 급식 정보 제공 서비스</h2>
-  <p style="color: #555; font-size:13px;">
-    <b>배고프당</b>은 공공데이터를 활용해 전국 초·중·고등학교의 급식 정보를 한눈에 확인할 수 있도록 도와주는 웹사이트입니다. 
-  </p>
+<!-- ✅ 오늘의 인기 급식 표시 -->
+<div class="container">
+  <h2>🏆 오늘의 인기 급식</h2>
+  <p id="top-meal">가장 많은 하트를 받은 학교의 급식을 불러오는 중입니다...</p>
+
+  <!-- 검색 컨테이너 -->
+  <h1>학교 검색</h1>
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="학교 이름을 입력하세요" />
+    <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+  </div>
+  <button id="search-button">검색</button>
+  <div id="search-results"></div>
+
+  <div id="meal-section" class="hidden">
+    <p>날짜를 입력하세요</p>
+    <input type="date" id="meal-date" />
+    <button id="meal-button">급식 메뉴 확인</button>
+    <div id="meal-menu"></div>
+  </div>
 </div>
 
-<!-- 🔹 오늘의 인기 급식 (간결 버전) -->
-<h2 style="margin-left: 20px; margin-top: 40px; font-size: 20px; color: #3f51b5;">📢 오늘의 인기 급식</h2>
-
-<div style="display: flex; flex-direction: column; gap: 14px; margin-left: 20px; margin-bottom: 20px;">
-  <div class="meal-card" style="padding: 14px 18px; font-size: 14.5px; line-height: 1.5; border-left: 4px solid #4caf50;">
-    <strong>광주국제고등학교</strong> <span style="font-size: 12px; color: #888;">(2025-07-01)</span><br>
-    🍚 김치볶음밥, 🥚 계란국, 🍗 치킨너겟, 🥬 깍두기
-  </div>
-
-  <!-- 검색 컨테이너 (Search Container) -->
-  <div class="container">
-    <h1>학교 검색</h1>
-    <div class="search-container">
-      <input type="text" id="search-input" placeholder="학교 이름을 입력하세요" />
-      <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
-    </div>
-    <button id="search-button">검색</button>
-    <div id="search-results"></div>
-
-    <div id="meal-section" class="hidden">
-      <p>날짜를 입력하세요</p>
-      <input type="date" id="meal-date" />
-      <button id="meal-button">급식 메뉴 확인</button>
-      <div id="meal-menu"></div>
-    </div>
-  </div>
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9502194389239851"
-     crossorigin="anonymous"></script>
-<!-- ｔｏｄａｙｍｅａｌ ｆｏｏｔｅｒ -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9502194389239851"
-     data-ad-slot="3355980949"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
 <script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
+  document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.getElementById("hamburger");
+    const menu = document.getElementById("menu");
+
+    hamburger.addEventListener("click", () => {
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    });
+  });
 </script>
 
-<!--개인정보처리방침 footer-->
-<footer style="margin-top: 60px; text-align: center; padding: 20px 10px; font-size: 14px; color: #777; background-color: #f0f8ff;">
-  <div style="margin-bottom: 10px;">
-    <a href="privacy.html" style="text-decoration: none; color: #5c6bc0;">📜 개인정보처리방침</a>
-    &nbsp;|&nbsp;
-    <a href="mailto:hyungminnnnn@gmail.com" style="text-decoration: none; color: #5c6bc0;">📩 문의하기</a>
-  </div>
-  <div>© 2025 배고프당. All rights reserved.</div>
-</footer>
-
- <!-- 기존 검색 로직 (Existing Search Logic) -->
-  <script src="static/js.js"></script>
+<!-- Firebase SDK + 인기 급식 불러오기 -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjpkGSZIv7HrerKHftYhNbNRrfveU-Fo4",
+    authDomain: "todaymeal-19430.firebaseapp.com",
+    projectId: "todaymeal-19430",
+    storageBucket: "todaymeal-19430.appspot.com",
+    messagingSenderId: "709245069596",
+    appId: "1:709245069596:web:1eb199ebc794d27e132d9"
+  };
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+  const todayStr = new Date().toISOString().split('T')[0];
+  db.collection("dailyVotes")
+    .where("date", "==", todayStr)
+    .orderBy("count", "desc").limit(1)
+    .get()
+    .then((querySnapshot) => {
+      const topMealEl = document.getElementById("top-meal");
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        const data = doc.data();
+        topMealEl.innerHTML = `<b>${data.schoolName}</b> - ${data.meal || "(급식 정보 없음)"}`;
+      } else {
+        topMealEl.innerText = "오늘 투표된 급식 정보가 없습니다.";
+      }
+    })
+    .catch((error) => {
+      console.error("인기 급식 불러오기 오류: ", error);
+    });
+</script>
+<script src="static/js.js"></script>
 </body>
 </html>
