@@ -198,3 +198,41 @@ input[type="password"]:focus {
 #login-tab{
   margin-bottom: 10px;
 }
+#menu {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background: white;
+  border-radius: 10px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 180px;
+  z-index: 998;
+  white-space: nowrap;
+
+  display: flex;                 /* ✅ flex로 유지 */
+  flex-direction: column;       /* ✅ 세로 정렬 */
+  gap: 10px;                     /* ✅ 항목 간 간격 */
+}
+.top-meal-box {
+
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;          /* ✅ 가로 가운데 정렬 */
+  width: 100%;
+  max-width: 400px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(92, 107, 192, 0.05);
+  text-align: center;         /* ✅ 텍스트 가운데 정렬 */
+}
+.top-meal-box h2 {
+  color: #3f51b5;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.top-meal-box p {
+  font-size: 15px;
+  color: #444;
+}
