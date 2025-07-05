@@ -181,55 +181,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const popularDiv = document.getElementById("popular-meal-info");
 
-  async function loadPopularMeal() {
-    const votesSnapshot = await db.collection("votes").get();
-    let topDoc = null;
-    let maxVotes = 0;
+async function loadPopularMeal() {
+  const popularDiv = document.getElementById("popular-meal-info");
 
-    for (const doc of votesSnapshot.docs) {
-      const userVotes = await db.collection("votes").doc(doc.id).collection("users").get();
-      const count = userVotes.size;
+  // 🔹 오늘 날짜와 요일 확인
+  const today = new Date();
+  const yyyyMMdd = today.toISOString().split("T")[0]; // '2025-07-05' 형식
+  const dayOfWeek = today.getDay(); // 0: 일요일, 6: 토요일
 
-      if (count > maxVotes) {
-        maxVotes = count;
-        topDoc = doc.id;
-      }
-    }
-
-    if (!topDoc) {
-      popularDiv.innerHTML = "<p>아직 인기 급식이 없습니다.</p>";
-      return;
-    }
-
-    const [schoolName, date] = topDoc.split("_");
-    const mealDate = date.replace(/-/g, "");
-
-    // ✅ Firestore에서 직접 schoolCode, eduOfficeCode 읽기
-    const voteDoc = await db.collection("votes").doc(topDoc).get();
-    if (!voteDoc.exists) {
-      popularDiv.innerHTML = "<p>급식 데이터를 찾을 수 없습니다.</p>";
-      return;
-    }
-
-    const { schoolCode, eduOfficeCode } = voteDoc.data();
-
-    const mealRes = await fetch(`https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${mealDate}`);
-    const mealData = await mealRes.json();
-
-    if (!mealData.mealServiceDietInfo || mealData.mealServiceDietInfo.length < 2) {
-      popularDiv.innerHTML = `<p>${schoolName}의 ${date} 급식 정보가 없습니다.</p>`;
-      return;
-    }
-
-    const menu = mealData.mealServiceDietInfo[1].row[0].DDISH_NM.replace(/<br\/>/g, "<br>");
-    popularDiv.innerHTML = `
-      <h3>${schoolName} (${date})</h3>
-      <div class="meal-card" style="margin-top:10px;">
-        <p>${menu}</p>
-        <p style="color: #5c6bc0; font-weight: bold;">❤️ ${maxVotes}표</p>
-      </div>
-    `;
+  // 🔹 주말이면 안내 문구 표시 후 종료
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    popularDiv.innerHTML = "<p>오늘은 주말입니다!</p>";
+    return;
   }
+
+  // 🔹 Firebase에서 오늘 날짜에 해당하는 투표만 검색
+  const votesSnapshot = await db.collection("votes").get();
+  let topDoc = null;
+  let maxVotes = 0;
+
+  for (const doc of votesSnapshot.docs) {
+    if (!doc.id.endsWith(`_${yyyyMMdd}`)) continue; // 오늘 날짜가 아닌 건 제외
+
+    const userVotes = await db.collection("votes").doc(doc.id).collection("users").get();
+    const count = userVotes.size;
+
+    if (count > maxVotes) {
+      maxVotes = count;
+      topDoc = doc.id;
+    }
+  }
+
+  if (!topDoc) {
+    popularDiv.innerHTML = `<p>아직 ${yyyyMMdd}의 인기 급식 투표가 없습니다.</p>`;
+    return;
+  }
+
+  const [schoolName, date] = topDoc.split("_");
+  const voteDoc = await db.collection("votes").doc(topDoc).get();
+  if (!voteDoc.exists) {
+    popularDiv.innerHTML = "<p>급식 데이터를 찾을 수 없습니다.</p>";
+    return;
+  }
+
+  const { schoolCode, eduOfficeCode } = voteDoc.data();
+  const mealDate = yyyyMMdd.replace(/-/g, "");
+
+  const mealRes = await fetch(`https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${eduOfficeCode}&SD_SCHUL_CODE=${schoolCode}&MLSV_YMD=${mealDate}`);
+  const mealData = await mealRes.json();
+
+  if (!mealData.mealServiceDietInfo || mealData.mealServiceDietInfo.length < 2) {
+    popularDiv.innerHTML = `<p>${schoolName}의 ${date} 급식 정보가 없습니다.</p>`;
+    return;
+  }
+
+  const menu = mealData.mealServiceDietInfo[1].row[0].DDISH_NM.replace(/<br\/>/g, "<br>");
+  popularDiv.innerHTML = `
+    <h3>${schoolName} (${date})</h3>
+    <div class="meal-card" style="margin-top:10px;">
+      <p>${menu}</p>
+      <p style="color: #5c6bc0; font-weight: bold;">❤️ ${maxVotes}표</p>
+    </div>
+  `;
+}
+
 
   loadPopularMeal();
 });
