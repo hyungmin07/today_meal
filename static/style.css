@@ -84,19 +84,17 @@ body {
 
 /* Container for main content (centered card) */
 .container {
-  max-width: 400px;
-  width: 100%; /* ✅ 모바일 대응 */
+  max-width: 420px;                   /* 좀 더 넓게 */
   margin: 40px auto;
   background: white;
-  padding: 40px;
+  padding: 42px 32px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  box-sizing: border-box; /* ✅ 패딩 포함 너비 계산 */
 }
 .container h1 {
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 23px;
+  margin-bottom: 22px;
 }
 
 /* Search box and autocomplete suggestions */
@@ -107,31 +105,37 @@ body {
 #search-input {
   width: 100%;
   padding: 12px;
-  font-size: 15px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-sizing: border-box;
 }
-/* Autocomplete suggestions dropdown */
-#autocomplete-suggestions {
-  position: absolute;
-  top: 44px;       /* directly below the input field */
-  left: 0;
-  right: 0;
-  background: #fff;
+
+.easy-autocomplete-container {
+  background: white;
   border: 1px solid #ccc;
   border-top: none;
   max-height: 200px;
   overflow-y: auto;
+  position: absolute;
   z-index: 1000;
 }
-.autocomplete-suggestions div {
+
+.easy-autocomplete-container ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.easy-autocomplete-container li {
   padding: 10px;
   cursor: pointer;
 }
-.autocomplete-suggestions div:hover {
+
+.easy-autocomplete-container li:hover {
   background-color: #f0f0f0;
 }
+
 
 /* Search and meal buttons */
 button {
@@ -216,23 +220,55 @@ input[type="password"]:focus {
   gap: 10px;
 }
 .top-meal-box {
-
   border-radius: 12px;
-  padding: 20px;
-  margin: 20px auto;          /* ✅ 가로 가운데 정렬 */
+  padding: 24px;                      /* 적당한 여백 */
+  margin: 28px auto;
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;                   /* 살짝 줄인 넓이 */
   background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(92, 107, 192, 0.05);
-  text-align: center;         /* ✅ 텍스트 가운데 정렬 */
+  box-shadow: 0 4px 8px rgba(92, 107, 192, 0.08);  /* 그림자도 부드럽게 */
+  text-align: center;
 }
 .top-meal-box h2 {
   color: #3f51b5;
-  font-size: 18px;
+  font-size: 17px;
   margin-bottom: 10px;
 }
 
 .top-meal-box p {
-  font-size: 15px;
+  font-size: 17px;
   color: #444;
+}
+/* 날짜 입력 안내 텍스트 */
+#meal-section p {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: #333;
+  text-align: center;
+  font-weight: 600;
+}
+/* 달력 input 필드 스타일 */
+#meal-date {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  transition: border 0.2s;
+}
+#meal-date:focus {
+  border-color: #5c6bc0;
+  outline: none;
+  box-shadow: 0 0 5px rgba(92, 107, 192, 0.3);
+}
+.search-container {
+  position: relative;  /* 꼭 필요함!! */
+}
+
+.easy-autocomplete-container {
+  z-index: 9999 !important;
+  background-color: white;
+  border: 1px solid #ccc;
 }
