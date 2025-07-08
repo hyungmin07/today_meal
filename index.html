@@ -66,9 +66,26 @@
   학교 이름을 검색하고 날짜를 선택하면 해당 날짜의 급식 내용을 볼 수 있어요
 </p>
 
-<noscript>
-  <p>오늘의 급식 예시: 쌀밥, 미역국, 제육볶음, 배추김치, 요구르트</p>
-</noscript>
+<!-- 올바르게 바깥쪽에 section 분리 -->
+<section style="padding: 20px 15px; max-width: 700px; margin: 80px auto 20px auto; background: white; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+  <h2 style="text-align:center; color:#3f51b5;">배고프당이란?</h2>
+  <p style="font-size:15px; color:#444; line-height:1.6;">
+    <b>배고프당</b>은 전국 초·중·고등학교의 <b>급식 정보를 한눈에</b> 볼 수 있도록 만든 웹사이트입니다.<br>
+    <b>교육부 NEIS 공공 API</b>를 사용하여 <b>매일 실시간 급식 데이터를 자동으로 불러옵니다.</b><br><br>
+    학생, 학부모, 선생님 모두에게 유용한 급식 알림 서비스입니다!
+  </p>
+</section>
+
+<!-- 🔽 이건 따로 -->
+<section style="padding: 20px; max-width: 700px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+  <h2 style="text-align: center;">📌 기능 안내</h2>
+  <ul style="line-height: 1.8; color: #333;">
+    <li>🔍 학교 검색 시 자동완성 기능 제공</li>
+    <li>📆 날짜 선택 후 해당 날짜의 급식 정보 출력</li>
+    <li>❤️ 인기 급식 투표 및 하트 수 표시</li>
+    <li>📊 오늘 가장 인기 있는 급식을 메인에서 실시간 보여줌</li>
+  </ul>
+</section>
 
 <!-- ✅ 오늘의 인기 급식 표시 -->
 <div class="top-meal-box">
@@ -93,6 +110,7 @@
     <div id="meal-menu"></div>
   </div>
 </div>
+
 
 <!-- 구글광고영역 -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9502194389239851"

@@ -196,12 +196,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           }
         },
-        template: {
-          type: "custom",
-          method: function (value, item) {
-            return `${item.SCHUL_NM} - <span style="font-size:0.8em;color:#aaa">${item.SD_SCHUL_CODE}</span>`;
-          }
-        }
+   template: {
+  type: "custom",
+  method: function(value, item) {
+    return item.SCHUL_NM;
+  }
+}
+
       };
 
       $("#search-input").parent().find(".easy-autocomplete-container").remove();
