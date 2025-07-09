@@ -285,3 +285,6 @@ input[type="password"]:focus {
 .easy-autocomplete-container li:hover {
   background-color: #f0f4ff;
 }
+.hidden {
+  display: none;
+}

@@ -8,202 +8,123 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <style>
-    body {
-      background-color: #eef5ff;
-      margin: 0;
-      padding-top: 80px;
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-    #heart-btn {
-      font-size: 30px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    #heart-btn.active {
-      color: red;
-    }
-  </style>
 </head>
 <body>
-
-<!-- 홀림 내비게이션 바 -->
-<div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center;">
-  <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-    <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
-    <span style="color: white; font-size: 20px; font-weight: bold; font-style: oblique;">배고프당</span>
-  </a>
-  <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
-    <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
-    <div id="hamburger" style="cursor: pointer; font-size: 24px; color: white;">☰</div>
+  <div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center;">
+    <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+      <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
+      <span style="color: white; font-size: 20px; font-weight: bold; font-style: oblique;">배고프당</span>
+    </a>
+    <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
+      <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
+      <div id="hamburger" style="cursor: pointer; font-size: 24px; color: white;">☰</div>
+    </div>
   </div>
-</div>
 
-<!-- 드론 메뉴 -->
-<div id="menu" style="
-  display: none;
-  flex-direction: column;
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background: white;
-  border-radius: 10px;
-  padding: 12px 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 180px;
-  z-index: 998;
-  gap: 10px;
-">
-  <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
-  <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
-</div>
-
-<!-- 메인 컨텐츠 -->
-<div class="container">
-  <h2>학교 검색 및 오늘의 급식 투표</h2>
-  <div class="search-container" style="position: relative; display:inline-block;">
-    <input type="text" id="search-input" placeholder="학교 이름을 입력하세요" autocomplete="off" />
-    <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+  <div id="menu" style="display: none; flex-direction: column; position: absolute; top: 60px; right: 10px; background: white; border-radius: 10px; padding: 12px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 180px; z-index: 998; gap: 10px;">
+    <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
+    <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
   </div>
-  <button id="search-button">검색</button>
 
-  <div id="meal-section" class="hidden" style="margin-top: 20px;">
+<div class="container" style="margin-top: 100px;">
+  <h2>오늘의 급식 </h2>
+  <p id="school-name" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;"></p>
+
+  <div id="meal-section" style="margin-top: 20px;">
     <input type="date" id="meal-date" style="display:none;" />
     <div id="meal-menu" style="margin-top: 20px;"></div>
-    <button id="heart-btn" style="display:none;">🧥</button>
-    <div class="message" id="vote-message"></div>
+    <button id="heart-btn" style="display:none; font-size: 30px; border: none; background: none; cursor: pointer;">🤍</button>
+    <div id="vote-message" class="message"></div>
   </div>
 </div>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjo8SBs",
-    authDomain: "todaymeal-1e714.firebaseapp.com",
-    projectId: "todaymeal-1e714",
-    storageBucket: "todaymeal-1e714.appspot.com",
-    messagingSenderId: "815968093910",
-    appId: "1:815968093910:web:015a59857e22478230ab77"
-  };
+    <div id="meal-section" class="hidden" style="margin-top: 20px;">
+      <input type="date" id="meal-date" style="display:none;" />
+      <div id="meal-menu" style="margin-top: 20px;"></div>
+      <button id="heart-btn" style="display:none; font-size: 30px; border: none; background: none; cursor: pointer;">🤍</button>
+      <div id="vote-message" class="message"></div>
+    </div>
+  </div>
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const hamburger = document.getElementById("hamburger");
-    const menu = document.getElementById("menu");
-
-    if (hamburger && menu) {
-      hamburger.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const isVisible = menu.style.display === "flex";
-        menu.style.display = isVisible ? "none" : "flex";
-      });
-
-      document.addEventListener("click", (e) => {
-        if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
-          menu.style.display = "none";
-        }
-      });
-    }
-  });
-
-  firebase.auth().onAuthStateChanged((user) => {
-    if (!user) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      window.location.href = "auth.html";
-      return;
-    }
-
-    const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f";
-    const searchInput = document.getElementById("search-input");
-    const searchButton = document.getElementById("search-button");
-    const suggestionsContainer = document.getElementById("autocomplete-suggestions");
-    const mealSection = document.getElementById("meal-section");
-    const mealMenu = document.getElementById("meal-menu");
-    const heartBtn = document.getElementById("heart-btn");
-    const voteMessage = document.getElementById("vote-message");
-    const mealDate = document.getElementById("meal-date");
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjo8SBs",
+      authDomain: "todaymeal-1e714.firebaseapp.com",
+      projectId: "todaymeal-1e714",
+      storageBucket: "todaymeal-1e714.appspot.com",
+      messagingSenderId: "815968093910",
+      appId: "1:815968093910:web:015a59857e22478230ab77"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
     let selectedSchool = null;
+    let user = null;
 
-    searchInput.addEventListener("input", function () {
-      const query = searchInput.value.trim();
-      suggestionsContainer.innerHTML = "";
-      if (!query) return;
+    firebase.auth().onAuthStateChanged(async (u) => {
+      if (!u) {
+        alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        window.location.href = "auth.html";
+        return;
+      }
+      user = u;
+      const doc = await db.collection("users").doc(user.uid).get();
+      const school = doc.data()?.schoolInfo;
+      if (school) {
+            document.getElementById("school-name").innerText = ` ${school.SCHUL_NM}`;
+        const today = new Date().toISOString().slice(0, 10);
+        document.getElementById("meal-date").value = today;
 
-      fetch(`https://open.neis.go.kr/hub/schoolInfo?KEY=${API_KEY}&Type=json&SCHUL_NM=${query}`)
-        .then(res => res.json())
-        .then(data => {
-          if (!data.schoolInfo) return;
-          data.schoolInfo[1].row.slice(0, 5).forEach(school => {
-            const item = document.createElement("div");
-            item.classList.add("autocomplete-item");
-            item.textContent = school.SCHUL_NM;
-            item.onclick = () => {
-              searchInput.value = school.SCHUL_NM;
-              selectedSchool = school;
-              const today = new Date().toISOString().slice(0, 10);
-              mealDate.value = today;
-
-              mealSection.classList.remove("hidden");
-              suggestionsContainer.innerHTML = "";
-
-              fetchMeal(today);
-            };
-            suggestionsContainer.appendChild(item);
-          });
-        });
+        selectedSchool = school;
+        document.getElementById("meal-section").classList.remove("hidden");
+        fetchMeal(today);
+      }
     });
 
     function fetchMeal(date) {
+      const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f";
       const url = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${selectedSchool.ATPT_OFCDC_SC_CODE}&SD_SCHUL_CODE=${selectedSchool.SD_SCHUL_CODE}&MLSV_YMD=${date.replace(/-/g, "")}`;
       fetch(url)
         .then(res => res.json())
         .then(data => {
-          if (!data.mealServiceDietInfo || data.mealServiceDietInfo.length < 2) {
+          const mealData = data.mealServiceDietInfo?.[1]?.row?.[0];
+          const mealMenu = document.getElementById("meal-menu");
+          const heartBtn = document.getElementById("heart-btn");
+          if (!mealData) {
             mealMenu.innerHTML = "<p>급식 정보가 없습니다.</p>";
             heartBtn.style.display = "none";
             return;
           }
-          const meal = data.mealServiceDietInfo[1].row[0].DDISH_NM.replace(/<br\/?>/g, "<br>");
-          mealMenu.innerHTML = `<h3>${date} 급식 정보</h3><p>${meal}</p>`;
+          mealMenu.innerHTML = `<h3>${date} 급식 정보</h3><p>${mealData.DDISH_NM.replace(/<br\/?/g, "<br>")}</p>`;
           heartBtn.style.display = "inline-block";
-          checkVoteStatus(selectedSchool.SCHUL_NM, date, user.uid);
+          checkVoteStatus(selectedSchool.SCHUL_NM, date);
         });
     }
 
-    heartBtn.onclick = async () => {
-      const date = mealDate.value;
-      const schoolName = searchInput.value;
-      const docRef = db.collection("votes").doc(`${schoolName}_${date}`).collection("users").doc(user.uid);
+    document.getElementById("heart-btn").onclick = async () => {
+      const date = document.getElementById("meal-date").value;
+      const docRef = db.collection("votes").doc(`${selectedSchool.SCHUL_NM}_${date}`).collection("users").doc(user.uid);
       const doc = await docRef.get();
+      const heartBtn = document.getElementById("heart-btn");
+      const voteMessage = document.getElementById("vote-message");
 
       if (doc.exists) {
         await docRef.delete();
         heartBtn.classList.remove("active");
         heartBtn.innerText = "🤍";
         voteMessage.innerText = "투표가 취소되었습니다.";
-      } else { await db.collection("votes").doc(`${schoolName}_${date}`).set({
-    schoolCode: selectedSchool.SD_SCHUL_CODE,
-    eduOfficeCode: selectedSchool.ATPT_OFCDC_SC_CODE
-  }, { merge: true });
-        
-        await docRef.set({
-          votedAt: new Date(),
-          schoolCode: selectedSchool.SD_SCHUL_CODE,
-          eduOfficeCode: selectedSchool.ATPT_OFCDC_SC_CODE
-        });
+      } else {
+        await docRef.set({ votedAt: new Date() });
         heartBtn.classList.add("active");
         heartBtn.innerText = "❤️";
         voteMessage.innerText = "투표가 완료되었습니다!";
       }
     };
 
-    async function checkVoteStatus(schoolName, date, userId) {
-      const docRef = db.collection("votes").doc(`${schoolName}_${date}`).collection("users").doc(userId);
+    async function checkVoteStatus(schoolName, date) {
+      const docRef = db.collection("votes").doc(`${schoolName}_${date}`).collection("users").doc(user.uid);
       const doc = await docRef.get();
+      const heartBtn = document.getElementById("heart-btn");
       if (doc.exists) {
         heartBtn.classList.add("active");
         heartBtn.innerText = "❤️";
@@ -212,7 +133,25 @@
         heartBtn.innerText = "🤍";
       }
     }
-  });
-</script>
+    // ✅ 햄버거 메뉴 열기/닫기
+  const hamburger = document.getElementById("hamburger");
+  const menu = document.getElementById("menu");
+
+  if (hamburger && menu) {
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isVisible = menu.style.display === "flex";
+      menu.style.display = isVisible ? "none" : "flex";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    });
+  }
+
+  
+  </script>
 </body>
 </html>

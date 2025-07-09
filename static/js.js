@@ -213,4 +213,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ✅ 오늘의 인기 급식 출력 실행
   loadPopularMeal();
+
+firebase.auth().onAuthStateChanged(async (user) => {
+  if (!user) return;
+
+  const today = new Date().toISOString().slice(0, 10);
+  const mealMenuDiv = document.getElementById("meal-menu");
+  const mealSection = document.getElementById("meal-section");
+  const loginRequired = document.getElementById("login-required");
+  const searchInput = document.getElementById("search-input");
+  const mealDate = document.getElementById("meal-date");
+const manualCheck = document.getElementById("manual-check");
+if (manualCheck) manualCheck.style.display = "none";
+
+
+  try {
+    const doc = await db.collection("users").doc(user.uid).get();
+    if (!doc.exists) return;
+
+    const schoolInfo = doc.data().schoolInfo;
+    if (!schoolInfo) {
+      mealMenuDiv.innerHTML = "<p>학교 정보가 없습니다. 마이페이지에서 학교를 먼저 설정해주세요.</p>";
+      return;
+    }
+
+    const schoolName = schoolInfo.SCHUL_NM;
+    const schoolCode = schoolInfo.SD_SCHUL_CODE;
+    const eduOfficeCode = schoolInfo.ATPT_OFCDC_SC_CODE;
+
+    // 🔒 검색창 숨기고 급식 섹션 보이기
+    if (loginRequired) loginRequired.style.display = "none";
+    mealSection.classList.remove("hidden");
+
+    // 🔽 오늘 날짜 설정 + 자동 급식 출력
+    if (mealDate) mealDate.value = today;
+    if (searchInput) searchInput.value = schoolName;
+    fetchMeal(schoolCode, eduOfficeCode, today);
+  } catch (error) {
+    console.error("자동 급식 표시 오류:", error);
+  }
+});
+
+
+
+
+
+
+//문서 끝 이 아래수정 금지//
 });
