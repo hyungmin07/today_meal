@@ -38,49 +38,7 @@ body {
   color: white;
 }
 
-/* Right-side menu (My Page link and hamburger icon) */
-.menu-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.menu-right a {
-  font-size: 13px;
-  color: white;
-  text-decoration: none;
-}
 
-/* Hamburger menu icon (☰) */
-.menu-icon {
-  font-size: 22px;
-  cursor: pointer;
-  color: white;
-}
-
-/* Dropdown menu panel (hidden by default) */
-#menu {
-  display: none;               /* Hidden until toggled */
-  position: fixed;             /* Fixed so it stays with navbar on scroll */
-  top: 60px;                   /* Position just below the navbar (approximately navbar height) */
-  right: 20px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 10px 15px;
-  white-space: nowrap;
-  min-width: 160px;
-  text-align: center;
-  z-index: 999;                /* Above other content (just below navbar z-index) */
-}
-#menu a {
-  display: inline-block;
-  padding: 8px 16px;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  font-weight: bold;
-}
 
 /* Container for main content (centered card) */
 .container {
@@ -205,20 +163,6 @@ input[type="password"]:focus {
 #login-tab{
   margin-bottom: 10px;
 }
-#menu {
-    display: none;                /* ✅ 기본값은 none만 남기기 */
-  flex-direction: column;
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background: white;
-  border-radius: 10px;
-  padding: 12px 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 180px;
-  z-index: 998;
-  gap: 10px;
-}
 .top-meal-box {
   border-radius: 12px;
   padding: 24px;                      /* 적당한 여백 */
@@ -287,4 +231,46 @@ input[type="password"]:focus {
 }
 .hidden {
   display: none;
+}
+/* 슬라이드 사이드바 스타일 */
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  width: 250px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+  padding: 30px 20px;
+  z-index: 9999;
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+/* 메뉴 항목 스타일 */
+.sidebar-menu a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 15px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* 호버 시 스타일 */
+.sidebar-menu a:hover {
+  background-color: #5c6bc0;
+  color: white;
+}
+
+.sidebar-menu.open {
+  right: 0;
 }

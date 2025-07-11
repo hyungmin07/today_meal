@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주간 급식 확인 - 배고프당</title>
+<link rel="stylesheet" href="static/style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <style>
+    .week-container {
+      max-width: 600px;
+      margin: 100px auto 40px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .day-block {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 15px;
+    }
+    .day-block:last-child {
+      border-bottom: none;
+    }
+    .day-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .meal-list {
+      color: #333;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+ 
+ 
+    <!-- 🔹 상단 네비게이션 바 -->
+<div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+  <!-- 로고 및 홈 링크 -->
+  <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+    <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
+    <span style="color: white; font-size: 20px; font-weight: bold;font-style: oblique;">배고프당</span>
+  </a>
+
+  <!-- 메뉴와 마이페이지 버튼 -->
+ <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
+  <div id="hamburger" style="cursor: pointer; font-size: 30px;">☰</div>
+</div>
+</div>
+
+
+<!-- 사이드바 메뉴 -->
+<div id="menu" class="sidebar-menu">
+  <a href="vote.html">인기급식 투표하기</a>
+  <a href="auth.html">로그인/회원가입</a>
+  <a href="mypage.html">마이페이지</a>
+  <a href="week.html">주간급식</a>
+</div>
+  <!-- 주간 급식 표시 구역 -->
+  <div class="week-container" id="week-meal-box">
+    <h2 style="text-align:center; margin-bottom: 20px;">🥗 이번 주 급식 정보</h2>
+    <div id="week-meals">불러오는 중입니다...</div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC03AFLg_KQpTMANt5b6hfPj3pEBjo8SBs",
+      authDomain: "todaymeal-1e714.firebaseapp.com",
+      projectId: "todaymeal-1e714",
+      storageBucket: "todaymeal-1e714.appspot.com",
+      messagingSenderId: "815968093910",
+      appId: "1:815968093910:web:015a59857e22478230ab77"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const API_KEY = "8e7a77dab2f34ff9b3f7d6ead4d6e39f";
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        document.getElementById("week-meals").innerText = "로그인 후 이용해주세요.";
+        return;
+      }
+
+      const doc = await db.collection("users").doc(user.uid).get();
+      if (!doc.exists || !doc.data().schoolInfo) {
+        document.getElementById("week-meals").innerText = "학교 정보가 없습니다. 마이페이지에서 학교를 설정해주세요.";
+        return;
+      }
+
+      const { SD_SCHUL_CODE, ATPT_OFCDC_SC_CODE } = doc.data().schoolInfo;
+      const today = new Date();
+      const day = today.getDay();
+      const monday = new Date(today);
+      monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1)); // 월요일 계산
+
+      const dates = [...Array(5).keys()].map(i => {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        return d.toISOString().slice(0, 10);
+      });
+
+      const promises = dates.map(date => fetch(`https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=${API_KEY}&Type=json&ATPT_OFCDC_SC_CODE=${ATPT_OFCDC_SC_CODE}&SD_SCHUL_CODE=${SD_SCHUL_CODE}&MLSV_YMD=${date.replace(/-/g, '')}`)
+        .then(res => res.json())
+        .then(data => {
+          let meal = "급식 정보 없음";
+          if (data.mealServiceDietInfo && data.mealServiceDietInfo.length >= 2) {
+            meal = data.mealServiceDietInfo[1].row[0].DDISH_NM.replace(/<br\/?\>/g, "\n");
+          }
+          return { date, meal };
+        })
+      );
+
+      const results = await Promise.all(promises);
+      const weekMealsDiv = document.getElementById("week-meals");
+      weekMealsDiv.innerHTML = results.map(({ date, meal }) => {
+        const weekday = new Date(date).toLocaleDateString("ko-KR", { weekday: 'long' });
+        return `
+          <div class="day-block">
+            <div class="day-title">📅 ${date} (${weekday})</div>
+            <div class="meal-list">${meal}</div>
+          </div>
+        `;
+      }).join('');
+    });
+   
+    // 사이드바
+  const hamburger = document.getElementById("hamburger");
+  const menu = document.getElementById("menu");
+
+  if (hamburger && menu) {
+    hamburger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.classList.toggle("open");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+        menu.classList.remove("open");
+      }
+    });
+  }
+
+  </script>
+</body>
+</html>

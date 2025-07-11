@@ -13,23 +13,24 @@ document.addEventListener("DOMContentLoaded", function () {
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  // ✅ 햄버거 메뉴 열기/닫기
+  // 사이드바
   const hamburger = document.getElementById("hamburger");
   const menu = document.getElementById("menu");
 
   if (hamburger && menu) {
     hamburger.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isVisible = menu.style.display === "flex";
-      menu.style.display = isVisible ? "none" : "flex";
+      menu.classList.toggle("open");
     });
 
     document.addEventListener("click", (e) => {
       if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
-        menu.style.display = "none";
+        menu.classList.remove("open");
       }
     });
   }
+
+
 
   // ✅ 급식 검색 기능
   const searchInput = document.getElementById("search-input");

@@ -16,15 +16,17 @@
       <span style="color: white; font-size: 20px; font-weight: bold; font-style: oblique;">배고프당</span>
     </a>
     <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
-      <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
-      <div id="hamburger" style="cursor: pointer; font-size: 24px; color: white;">☰</div>
+      <div id="hamburger" style="cursor: pointer; font-size: 30px; ">☰</div>
     </div>
   </div>
 
-  <div id="menu" style="display: none; flex-direction: column; position: absolute; top: 60px; right: 10px; background: white; border-radius: 10px; padding: 12px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 180px; z-index: 998; gap: 10px;">
-    <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
-    <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
-  </div>
+<!-- 사이드바 메뉴 -->
+<div id="menu" class="sidebar-menu">
+  <a href="vote.html">인기급식 투표하기</a>
+  <a href="auth.html">로그인/회원가입</a>
+  <a href="mypage.html">마이페이지</a>
+    <a href="week.html">주간급식</a>
+</div>
 
 <div class="container" style="margin-top: 100px;">
   <h2>오늘의 급식 </h2>
@@ -142,20 +144,19 @@ await docRef.set({ votedAt: new Date() });
         heartBtn.innerText = "🤍";
       }
     }
-    // ✅ 햄버거 메뉴 열기/닫기
+  // 사이드바
   const hamburger = document.getElementById("hamburger");
   const menu = document.getElementById("menu");
 
   if (hamburger && menu) {
     hamburger.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isVisible = menu.style.display === "flex";
-      menu.style.display = isVisible ? "none" : "flex";
+      menu.classList.toggle("open");
     });
 
     document.addEventListener("click", (e) => {
       if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
-        menu.style.display = "none";
+        menu.classList.remove("open");
       }
     });
   }

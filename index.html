@@ -48,32 +48,18 @@
 
   <!-- 메뉴와 마이페이지 버튼 -->
  <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
-  <a href="mypage.html" class="mypage-btn" style="background: white; padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: bold;">마이페이지</a>
-  <div id="hamburger" style="cursor: pointer; font-size: 24px;">☰</div>
+  <div id="hamburger" style="cursor: pointer; font-size: 30px;">☰</div>
 </div>
 </div>
 
 
-<!-- 🔹 드롭다운 메뉴 -->
-<div id="menu" style="
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background: white;
-  border-radius: 10px;
-  padding: 12px 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 180px;
-  z-index: 998;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-">
-  <a href="vote.html" style="text-decoration: none; color: #333; font-weight: bold;">🍽 인기급식 투표하기</a>
-  <a href="auth.html" style="text-decoration: none; color: #333; font-weight: bold;">🔐 로그인 / 회원가입</a>
+<!-- 사이드바 메뉴 -->
+<div id="menu" class="sidebar-menu">
+  <a href="vote.html">인기급식 투표하기</a>
+  <a href="auth.html">로그인/회원가입</a>
+  <a href="mypage.html">마이페이지</a>
+  <a href="week.html">주간급식</a>
 </div>
-
 
 <!--사이트설명-->
 <p style="font-size: 15px; color: #555; margin-top: 90px; text-align: center;">
@@ -82,9 +68,9 @@
 </p>
 
 <!-- 올바르게 바깥쪽에 section 분리 -->
-<section style="padding: 20px 15px; max-width: 700px; margin: 80px auto 20px auto; background: white; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
-  <h2 style="text-align:center; color:#3f51b5;">배고프당이란?</h2>
-  <p style="font-size:15px; color:#444; line-height:1.6;">
+<section style="background-color: #e8f0fe; border-left: 6px solid #5c6bc0; padding: 20px 25px; border-radius: 10px; margin:  auto; max-width: 700px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+  <h3 style="margin-top: 0; color: #3f51b5;">배고프당이란?</h3>
+  <p style="margin: 10px 0; font-size: 15px; line-height: 1.7; color: #333;">
     <b>배고프당</b>은 전국 초·중·고등학교의 <b>급식 정보를 한눈에</b> 볼 수 있도록 만든 웹사이트입니다.<br>
     <b>교육부 NEIS 공공 API</b>를 사용하여 <b>매일 실시간 급식 데이터를 자동으로 불러옵니다.</b><br><br>
     학생, 학부모, 선생님 모두에게 유용한 급식 알림 서비스입니다!
@@ -99,6 +85,20 @@
   <div id="popular-meal-info">가장 많은 하트를 받은 학교의 급식을 불러오는 중입니다...</div>
 </div>
 
+
+<!--로그인안내-->
+<div style="background-color: #e8f0fe; border-left: 6px solid #5c6bc0; padding: 20px 25px; border-radius: 10px; margin:  auto; max-width: 700px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+  <h3 style="margin-top: 0; color: #3f51b5;">🔔 로그인 안내</h3>
+  <p style="margin: 10px 0; font-size: 15px; line-height: 1.7; color: #333;">
+    로그인하시면<br>
+    ✅ 매번 학교를 검색하지 않아도 <strong>자동으로 오늘의 급식</strong>이 바로 보여요.<br>
+    ✅ <strong>하트를 눌러 인기 급식 투표</strong>에도 참여할 수 있어요!<br>
+    로그인 없이도 급식을 검색할 수 있지만,<br>
+    <strong>로그인하면 더 빠르고 편리하게</strong> 서비스를 이용할 수 있어요 😊
+  </p>
+</div>
+
+<!--검색창-->
 <div class="container">
   <div id="login-required">
     <h1>학교 검색</h1>
@@ -132,17 +132,6 @@
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 
-<!-- 🔹 푸터 영역 -->
-<footer style="text-align: center; padding: 30px 0; font-size: 14px; color: #666;">
-   <div>
-    <a href="https://www.instagram.com/im.___.hungry" target="_blank" style="display: inline-block; margin: 10px;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 50px; height: 50px;">
-  </a>
-</div>
-  <a href="/privacy.html" style="margin: 0 15px; color: #666; text-decoration: none;">개인정보 처리방침</a> |
-  <a href="mailto:contact@todaymeal.kr" style="margin: 0 15px; color: #666; text-decoration: none;">문의하기</a>
-  <p style="margin-top: 8px;">© 2025 배고프당. All rights reserved.</p>
-</footer>
 
 <noscript>
   <section style="padding:20px; font-size:14px; line-height:1.6; color:#444;">
@@ -169,6 +158,34 @@
     </p>
   </section>
 </noscript>
+
+
+<div style="background-color: #e8f0fe; border-left: 6px solid #5c6bc0; padding: 20px 25px; border-radius: 10px; margin:  auto; max-width: 700px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+  <h3 style="margin-top: 0; color: #3f51b5;"> 배고프당은 왜 만들어졌을까요?</h3>
+  <p style="margin: 10px 0; font-size: 15px; line-height: 1.7; color: #333;">
+    많은 학생들이 매일 무엇을 먹는지 미리 알고 싶어합니다.  
+    학교 홈페이지나 앱이 불편한 경우가 많아, 더 빠르고 편리하게 확인할 수 있도록  
+    '배고프당' 서비스를 시작하게 되었습니다.  
+    NEIS API를 이용해 전국 학교 급식을 자동으로 불러오며, 인기 급식 투표도 함께 지원합니다.
+  </p>
+  </div>
+
+
+
+<!-- 🔹 푸터 영역 -->
+<footer style="text-align: center; padding: 30px 0; font-size: 14px; color: #666;">
+   <div>
+    <a href="https://www.instagram.com/im.___.hungry" target="_blank" style="display: inline-block; margin: 10px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 50px; height: 50px;">
+  </a>
+</div>
+  <a href="/privacy.html" style="margin: 0 15px; color: #666; text-decoration: none;">개인정보 처리방침</a> |
+  <a href="mailto:contact@todaymeal.kr" style="margin: 0 15px; color: #666; text-decoration: none;">문의하기</a>
+  <p style="margin-top: 8px;">© 2025 배고프당. All rights reserved.</p>
+</footer>
+
+
+
 <script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};
