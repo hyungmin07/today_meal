@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>배고프당 - 학교 급식 알림 서비스</title>
+  <link rel="icon" type="image/x-icon" href="/today_meal/static/favicon.ico" />
+  
+  
+  
+  <!-- SEO / 메타 -->
+  <meta name="description" content="배고프당은 전국 초중고 학교의 급식 정보를 빠르게 확인할 수 있는 웹사이트입니다." />
+  <meta name="keywords" content="급식, 배고프당, 학교 급식, 급식 알림, 급식 정보, 학교" />
+  <meta name="author" content="hyungmin07" />
+  <meta property="og:title" content="배고프당" />
+  <meta property="og:description" content="전국 학교 급식 정보를 쉽게 확인해보세요." />
+  <meta property="og:url" content="https://todaymeal.kr" />
+  <meta property="og:type" content="website" />
+  <meta name="google-adsense-account" content="ca-pub-9502194389239851" />
+  <!-- 애드센스 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9502194389239851"
+     crossorigin="anonymous"></script>
+<meta name="description" content="Todaymeal is a Korean school lunch info service with voting features.">
+<!--자동완성기능 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easy-autocomplete@1.3.5/dist/easy-autocomplete.min.css">
+<script src="https://cdn.jsdelivr.net/npm/easy-autocomplete@1.3.5/dist/jquery.easy-autocomplete.min.js"></script>
+  
+<!--스타일.css-->
+<link rel="stylesheet" href="static/style.css" />
+
+  <!-- ✅ 이거 추가해야 로그인 감지 가능 -->
+ <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
+
+<!--head끝-->
+</head>
+<body>
+<!-- 🔹 상단 네비게이션 바 -->
+<div style="position: fixed; top: 0; left: 0; width: 100%; background-color: #5c6bc0; padding: 12px 20px; z-index: 999; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+  <!-- 로고 및 홈 링크 -->
+  <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+    <img src="static/logo.png" alt="배고프당 로고" style="height: 50px; border-radius: 35%;">
+    <span style="color: white; font-size: 20px; font-weight: bold;font-style: oblique;">배고프당</span>
+  </a>
+
+  <!-- 메뉴와 마이페이지 버튼 -->
+ <div style="display: flex; gap: 10px; align-items: center; margin-right: 25px;">
+  <div id="hamburger" style="cursor: pointer; font-size: 30px;">☰</div>
+</div>
+</div>
+
+
+<!-- 사이드바 메뉴 -->
+<div id="menu" class="sidebar-menu">
+  <a href="vote.html">인기급식 투표하기</a>
+  <a href="auth.html">로그인/회원가입</a>
+  <a href="mypage.html">마이페이지</a>
+  <a href="week.html">주간급식</a>
+</div>
+
+<!--사이트설명-->
+<p style="font-size: 15px; color: #555; margin-top: 90px; text-align: center;">
+  <b>배고프당</b>은 전국 초·중·고등학교의 급식 정보를 쉽게 확인할 수 있는 서비스입니다.
+  학교 이름을 검색하고 날짜를 선택하면 해당 날짜의 급식 내용을 볼 수 있어요
+</p>
+
+
+
+
+<h2 style="text-align: center;">데이터 출처 및 고지</h2>
+<p style="text-align: center;">
+오늘의 급식 서비스는 교육부 NEIS 공공데이터 API를 활용하여 학교 급식 정보를 제공합니다.<br><br>
+데이터 출처: <a href="https://www.data.go.kr/" target="_blank">교육부 NEIS (공공데이터포털)</a><br>
+본 서비스는 교육부 또는 정부기관과 공식적인 관계가 없는 비공식 서비스입니다.<br><br>
+API 데이터는 교육부에서 제공하는 공식 데이터이며, 정보의 최신성 및 정확성은 해당 기관의 제공 기준을 따릅니다.
+</p>
